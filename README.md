@@ -2,5 +2,5 @@
 A plugin that extends Memberpress's default functionality. 
 
 ## Requirements
-* Memberpress - Used for subscription management.
-* Meberpress Developer Tools - Memberpess's API plugin.
+* [Memberpress](https://memberpress.com/) - Used for subscription management.
+* [Meberpress Developer Tools]((https://memberpress.com/addons/developer-tools/) - Memberpess's API plugin.

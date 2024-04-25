@@ -7,7 +7,7 @@ A plugin that extends Memberpress's default functionality.
 
 ### Shortcodes
 `[tww_free_subscription]` - Use this shortcode to generate an email sign up tied to the memberpress product titled "Free Subscription"
-`[tww_memberpress_shortcode]` - Use this shortcode to generate the current membership card. The cards state can be one of the following:
+`[tww_current_membership]` - Use this shortcode to generate the current membership card. The cards state can be one of the following:
 * `active` - active subscription that has not expired, and a valid last payment transaction (or is in the grace period)
 * `canceled-but-active` - a canceled subscription that has not yet expired
 * `canceled-and-expired` - a canceled subscription that has also passed the expire date

@@ -29,7 +29,7 @@
             <div class="form-group">
                 <label for="tww-confirm-new-password">Confirm New Password <span class="required"><sup>*</sup></span></label>
                 <div class="tww-password-wrapper">
-                    <input type="password" name="confirm_password" id="tww-confirm-new-password" value="" placeholder="Confirm New Password" required autocomplete="new-password" />
+                    <input type="password" name="confirm_password" id="tww-confirm-new-password" value="" placeholder="Confirm New Password" required autocomplete="confirm-password" />
                     <button class="tww-plus-password-eye-btn" type="button"><span class="tww-plus-password-eye dashicons dashicons-hidden"></span></button>
                 </div>
             </div>

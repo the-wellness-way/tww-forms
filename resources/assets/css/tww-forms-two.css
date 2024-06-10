@@ -336,6 +336,11 @@ span.required {
     border: 1px solid  var(--red) !important;
 }
 
+.edit-username-form input.invalid:focus,
+#tww-change-password-form input.invalid:focus {
+    border: 1px solid  var(--red) !important;
+}
+
 #tww-change-password-form input.valid {
     border: 1px solid var(--brand-green);
 }

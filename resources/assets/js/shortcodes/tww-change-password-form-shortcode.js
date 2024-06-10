@@ -7,20 +7,36 @@ const initChangePasswordForm = () => {
     }
 
     form.addEventListener('input', async (event) => {
-        console.log('event.target', event.target)
+        let currentPassword = form.querySelector('input[name="current_password"')
+        let newPassword = form.querySelector('input[name="new_password"]');
+        let confirmPassword = form.querySelector('input[name="confirm_password"]');
+        let submitButton = form.querySelector('button[type="submit"]');
+
         if (event.target.type === 'password' && event.target.name !== 'current_password') {
-            if (event.target.value.length > 0 && !validatePassword(event.target.value)) {
+            if ((event.target.value.length > 0 && !validatePassword(event.target.value)) || currentPassword === newPassword) {
                 event.target.classList.add('invalid');
                 event.target.classList.remove('valid');
             } else {
                 event.target.classList.remove('invalid');
                 event.target.classList.add('valid');
             }
-        }
 
-        let newPassword = form.querySelector('input[name="new_password"]');
-        let confirmPassword = form.querySelector('input[name="confirm_password"]');
-        let submitButton = form.querySelector('button[type="submit"]');
+            console.log('confirmPassword.value', confirmPassword.value)
+                console.log('newPassword.value', newPassword.value)
+
+            if((newPassword.value && newPassword.classList.contains('valid')) && confirmPassword.value != newPassword.value) {
+                confirmPassword.classList.add('invalid');
+                confirmPassword.classList.remove('valid');
+                console.log(confirmPassword.value)
+                console.log(newPassword.value)
+            } else if (newPassword.value && newPassword.value == confirmPassword.value) {
+                confirmPassword.classList.add('valid');
+                confirmPassword.classList.remove('invalid');
+                console.log('yodi')
+            } else {
+                confirmPassword.classList.remove('invalid');
+            }
+        }
 
         if (newPassword.value === confirmPassword.value && newPassword.classList.contains('valid') && confirmPassword.classList.contains('valid')) {
             submitButton.disabled = false;

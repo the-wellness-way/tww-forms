@@ -1,13 +1,10 @@
 <?php
 use TWWForms\Shortcodes\TWW_MembershipShortcode;
-
-
 /**
  * 
  * 
  * We need to extend the MeprTransaction and MeprSubscription classes to ovverride magic methods that set and get properties
  */
-
 class Test_MeprTransaction extends \MeprTransaction {
     public function __construct() {
         parent::__construct([
@@ -31,8 +28,35 @@ class Test_MeprTransaction extends \MeprTransaction {
     }
 }
 
+class Test_Expired_MeprTransaction extends \MeprTransaction {
+    public function __construct() {
+        parent::__construct([
+            'id'              => 101,
+            'amount'          => 11.99,
+            'total'           => 11.99,
+            'status'          => 'complete',
+            'txn_type'        => 'subscription_confirmation',
+            'gateway'         => 'Stripe',
+            'prorated'        => null,
+            'created_at'      => date("Y-m-d H:i:s", $this->time_two_days_before()),
+            'expires_at'      => date("Y-m-d H:i:s", $this->time_day_before()), // should be yesterday
+            'subscription_id' => 44,
+            'order_id' => 1,
+        ]);
+    }
+
+    public function time_day_before() {
+        // Add 86400 seconds (1 day) to the current time
+        return time() - 86400;
+    }
+
+    public function time_two_days_before() {
+        // Add 86400 seconds (1 day) to the current time
+        return time() - 86400 * 2;
+    }
+}
+
 class Test_MeprSubscription extends \MeprSubscription {
-    //
     protected function mgm_first_txn_id($mgm, $val = '') {
         return 101;
     }
@@ -41,7 +65,6 @@ class Test_MeprSubscription extends \MeprSubscription {
         return new Test_MeprTransaction();
     }
 }
-
 
 class TWW_Test_MembershipShortcode extends WP_UnitTestCase {
     private $product;
@@ -53,6 +76,8 @@ class TWW_Test_MembershipShortcode extends WP_UnitTestCase {
     private $subscription_without_txn;
 
     private $transaction_subscription_confirmation;
+
+    private $expired_transaction;
 
     public function setUp() : void {
         $this->product = new MeprProduct([
@@ -77,6 +102,8 @@ class TWW_Test_MembershipShortcode extends WP_UnitTestCase {
         ]);
 
         $this->transaction_subscription_confirmation = new Test_MeprTransaction();
+
+        $this->expired_transaction = new Test_Expired_MeprTransaction();
         
         $this->subscription = new Test_MeprSubscription([
             'id'                  => 44,
@@ -173,15 +200,16 @@ class TWW_Test_MembershipShortcode extends WP_UnitTestCase {
         $this->assertEquals($twwMemeberShipMock->get_subscription_latest_txn(), null);
     }
 
-    public function time_day_ahead() {
-        // Add 86400 seconds (1 day) to the current time
-        return time() + 86400;
-    }
-
     public function test_subscription_in_grace_period() {
         $tww_membership = new TWW_MembershipShortcode(null, $this->subscription, $this->transaction_subscription_confirmation);
 
         $this->assertTrue($tww_membership->subscription_in_grace_period(), true);
+    }
+
+    public function test_expired_scenario_produces_expired_string() {
+        $tww_membership = new TWW_MembershipShortcode(null, $this->subscription, $this->expired_transaction);
+
+        $this->assertEquals($tww_membership->print_status_tag(), '<span class="membership-status expired">Expired</span>');
     }
 }
 

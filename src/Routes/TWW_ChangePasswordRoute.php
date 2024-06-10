@@ -1,4 +1,5 @@
 <?php
+
 namespace TWWForms\Routes;
 
 use TWWForms\Routes\TWW_Routes;
@@ -9,13 +10,13 @@ class TWW_ChangePasswordRoute extends TWW_Routes {
             'methods' => 'POST',
             'callback' => 'change_password',
             'path' => '/change-password',
-            'permission_callback' => '__return_true',
-        ],
+        ]
       ];
   
       public function boot() {
         $this->register_routes();
       }
+
       public function change_password(\WP_REST_Request $request) {
         $params = $request->get_params();
   
@@ -45,9 +46,10 @@ class TWW_ChangePasswordRoute extends TWW_Routes {
         if(!$user) {
           return new \WP_Error('user_not_found', 'User not found', ['status' => 400]);
         }
+
   
         if(!wp_check_password($params['current_password'], $user->data->user_pass, $user->ID)) {
-          return new \WP_Error('invalid_password', 'Entered invalid current password.', ['status' => 400]);
+          return new \WP_Error('invalid_password', 'Invalid password', ['status' => 400]);
         }
   
         wp_set_password($params['new_password'], $user->ID);

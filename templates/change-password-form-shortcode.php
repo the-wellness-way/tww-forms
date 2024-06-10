@@ -7,8 +7,6 @@
 ?>
 <div class="change-password-form">
     <form id="tww-change-password-form" autocomplete="off">
-        
-        
         <div class="form-group">
             <label for="tww-current-password">Current Password <span class="required"><sup>*</sup></span></label>
             <div class="tww-password-wrapper">

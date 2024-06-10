@@ -33,18 +33,13 @@
 
  require_once 'vendor/autoload.php';
 
-function check_if_plugins_are_active() {
-    if (!is_plugin_active('memberpress/memberpress.php')) {
-        add_action('admin_notices', function() {
-            echo '<div class="error"><p>Error: MemberPress must be active for My Custom Plugin to function.</p></div>';
-        });
-    
-        return;
-    }
+if (!is_plugin_active('memberpress/memberpress.php')) {
+    add_action('admin_notices', function() {
+        echo '<div class="error"><p>Error: MemberPress must be active for My Custom Plugin to function.</p></div>';
+    });
+
+    return;
 }
-
-add_action('init', 'check_if_plugins_are_active');
-
 
 class TWW_Forms {
     public function __construct() {
@@ -147,3 +142,5 @@ add_action('init', function() {
 
     $pwdCtrl = new TWW_PasswordCtrl();
 });
+
+

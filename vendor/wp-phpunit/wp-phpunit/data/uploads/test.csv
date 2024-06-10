@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 "country","country group","name (en)","name (fr)","name (de)","latitude","longitude"
 "at","eu","Austria","Autriche","Österreich","47.6965545","13.34598005"
 "be","eu","Belgium","Belgique","Belgien","50.501045","4.47667405"
@@ -14,21 +13,4 @@
 "country","country group","name (en)","name (fr)","name (de)","latitude","longitude"
 "at","eu","Austria","Autriche","Österreich","47.6965545","13.34598005"
 "be","eu","Belgium","Belgique","Belgien","50.501045","4.47667405"
-=======
-"country","country group","name (en)","name (fr)","name (de)","latitude","longitude"
-"at","eu","Austria","Autriche","Österreich","47.6965545","13.34598005"
-"be","eu","Belgium","Belgique","Belgien","50.501045","4.47667405"
-"bg","eu","Bulgaria","Bulgarie","Bulgarien","42.72567375","25.4823218"
-"country","country group","name (en)","name (fr)","name (de)","latitude","longitude"
-"at","eu","Austria","Autriche","Österreich","47.6965545","13.34598005"
-"be","eu","Belgium","Belgique","Belgien","50.501045","4.47667405"
-"bg","eu","Bulgaria","Bulgarie","Bulgarien","42.72567375","25.4823218"
-"country","country group","name (en)","name (fr)","name (de)","latitude","longitude"
-"at","eu","Austria","Autriche","Österreich","47.6965545","13.34598005"
-"be","eu","Belgium","Belgique","Belgien","50.501045","4.47667405"
-"bg","eu","Bulgaria","Bulgarie","Bulgarien","42.72567375","25.4823218"
-"country","country group","name (en)","name (fr)","name (de)","latitude","longitude"
-"at","eu","Austria","Autriche","Österreich","47.6965545","13.34598005"
-"be","eu","Belgium","Belgique","Belgien","50.501045","4.47667405"
->>>>>>> merge
 "bg","eu","Bulgaria","Bulgarie","Bulgarien","42.72567375","25.4823218"

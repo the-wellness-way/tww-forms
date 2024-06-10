@@ -72,6 +72,7 @@ class TWW_MembershipShortcode extends TWW_Shortcodes {
         include TWW_FORMS_PLUGIN . 'templates/current-membership-shortcode.php';
         return ob_get_clean();
     }
+
     public function get_scenario() {
         $status = $this->subscripiton_status();
         $txn = $this->subscription_latest_txn();
@@ -96,7 +97,7 @@ class TWW_MembershipShortcode extends TWW_Shortcodes {
             $scenario = self::$canceled_and_expired_str;
         }
         
-        if (self::$active_str === $status && !$in_grace_period && $latest_txn_failed) {
+        if (self::$active_str === $status && !$in_grace_period && ($latest_txn_failed || false !== strpos($status, 'No'))) {
             $scenario = self::$lapsed_str;
         }
         
@@ -122,6 +123,7 @@ class TWW_MembershipShortcode extends TWW_Shortcodes {
      * 
      * 
      */
+
      public function print_status_tag() {
         $scenario = $this->get_scenario();
 

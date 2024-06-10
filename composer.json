@@ -13,11 +13,6 @@
             "TWWForms\\": "src/"
         }
     },
-    "autoload-dev": {
-        "psr-4": {
-            "TWWForms\\Tests\\": "tests/"
-        }
-    },
     "authors": [
         {
             "name": "The Wellness Way"

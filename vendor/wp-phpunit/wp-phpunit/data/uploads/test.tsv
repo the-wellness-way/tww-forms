@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 sample	tsv	file	1
 some	text	here	2
 yup	it's	text	3
@@ -10,17 +9,4 @@ some	text	here	2
 yup	it's	text	3
 sample	tsv	file	1
 some	text	here	2
-=======
-sample	tsv	file	1
-some	text	here	2
-yup	it's	text	3
-sample	tsv	file	1
-some	text	here	2
-yup	it's	text	3
-sample	tsv	file	1
-some	text	here	2
-yup	it's	text	3
-sample	tsv	file	1
-some	text	here	2
->>>>>>> merge
 yup	it's	text	3

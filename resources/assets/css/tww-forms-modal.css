@@ -1,0 +1,126 @@
+:root {
+    --brand-green: rgb(128, 183, 65);
+    --brand-grey: rgb(136, 136, 136);
+    --border-grey: rgb(204, 204, 204);
+    --border-grey-light: rgb(238, 238, 238);
+
+    --tww-green: #80b741;
+    --tww-dark-grey: #414444;
+    --tww-medium-grey: #6d6d6d;
+    --tww-medium-light-grey: #a8a8a8;
+    --tww-light-grey: #ddddde;
+    --tww-beige: #dcd4cb;
+
+    --tww-white: white;
+
+    --black: rgb(0, 0, 0);
+    --red: rgb(153, 27, 27);
+
+    --active: rgb(220, 252, 231);
+    --active-alt: rgb(22, 101, 52);
+    --canceled: var(--red);
+    --pending: rgb(255, 255, 0);
+}
+
+.tww-change-plan-modal,
+.tww-plus-modal {
+    display: none;
+}
+
+.tww-change-plan-modal,
+.tww-plus-modal {
+    background-color: transparent;
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.tww-change-plan-modal,
+.tww-plus-modal {
+    display: none;
+}
+
+.tww-change-plan-modal.is-open,
+.tww-plus-modal.is-open {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    z-index: 9999;
+}
+
+.tww-change-plan-modal--inner,
+.tww-plus-modal__inner {
+    max-width: 400px;
+    background-color: var(--white);
+    width: 100%;
+    padding: 40px;
+    border: 1px solid var(--border-grey);
+    border-radius: 4px;
+}
+
+.tww-change-plan-modal--inner p,
+.tww-plus-modal__inner p {
+    margin-bottom: 10px;
+    padding-bottom: 0;
+}
+
+.tww-change-plan-modal--actions,
+.current-membership--actions,
+.tww-plus-modal__actions {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+    flex-wrap: wrap;
+}
+
+.tww-plus-modal__close {
+    color: var(--tww-green);
+    cursor: pointer;
+}
+
+.tww-plus-login__fields-wrapper {
+    display: flex;
+    flex-wrap: wrap;
+    margin-bottom: 10px;
+}
+
+.tww-plus-login__fields-wrapper--password {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.tww-plus-login__submit-wrapper {
+    margin-top: 10px;
+}
+
+#forgot-password-link {
+    color: var(--tww-green)
+}
+
+.tww-plus-login-fields {
+    padding-top: 10px;
+}
+
+.tww-plus-login__password {
+    position: relative;
+}
+
+.tww-plus-password-eye-btn {
+    position: absolute;
+    right: 0;
+    cursor: pointer;
+    background: transparent !important;
+    outline: none !important;
+    border: 0 !important;
+    padding: 0 20px;
+    color: var(--tww-dark-grey);
+}
+
+input.invalid {
+    border: 1px solid #b32d2e !important;
+}

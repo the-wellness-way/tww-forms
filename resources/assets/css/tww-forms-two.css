@@ -1,0 +1,356 @@
+:root {
+    --tww-green: #80b741;
+    --tww-dark-grey: #414444;
+    --tww-light-grey: #ddddde;
+    --tww-beige: #dcd4cb;
+
+    --brand-green: --tww-green;
+    --brand-grey: rgb(136, 136, 136);
+    --border-grey: rgb(204, 204, 204);
+    --border-grey-light: rgb(238, 238, 238);
+
+    --tww-white: white;
+
+    --black: rgb(0, 0, 0);
+    --red: rgb(153, 27, 27);
+
+    --active: rgb(220, 252, 231);
+    --active-alt: rgb(22, 101, 52);
+    --canceled: var(--red);
+    --pending: rgb(255, 255, 0);
+}
+
+/* current-membership */
+@media (min-width: 767px) {
+    .current-membership {
+        max-width: 350px;
+    }
+}
+
+.current-membership {
+    width: 100%;
+    border: 1px solid var(--border-grey-light) ;
+    border-radius: 4px;
+    padding: 20px;
+}
+
+.current-membership--header {
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.current-membership h2,
+.current-membership--inner .membership h3 {
+    font-style: normal !important;
+}
+
+.current-membership h2 {
+    color: var(--black);
+    font-size: 24px;
+    font-weight: bold;
+    letter-spacing: -.25px;
+    font-style: italic;
+    margin-bottom: 10px;
+}
+
+.current-membership--inner .membership h3 {
+    font-size: 18px;
+    line-height: 30px;
+    font-weight: bold;
+    color: var(--black);
+    margin-bottom: 20px;
+}
+
+.current-membership p {
+    margin-bottom: 20px;
+    padding-bottom: 0;
+}
+
+.current-membership .tag {
+    color: var(--brand-grey)
+}
+
+.current-membership .current-membership--actions > div:nth-child(2) {
+    margin-top: 40px !important;
+}
+
+select {
+    width: 100%;
+    outline-style: none;
+    font-size: inherit;
+    font-family: inherit;
+    padding: 10px;
+    letter-spacing: normal;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    margin-bottom: 10px !important;
+    display: inline;
+    box-sizing: border-box;
+    margin-bottom: 10px;
+}
+
+.current-membership--actions {
+    display: flex;
+    justify-content: space-between;
+}
+
+/* loader */
+a.loader-default,
+button.loader-default {
+    width: 150px !important;
+    height: 50px !important;
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    background-color: var(--brand-green) !important;
+    color: white !important;
+    font-style: normal !important;
+    text-decoration: none !important;
+    border-radius: 4px !important;
+    font-size: 14px !important;
+    outline: none !important;
+    outline: 0;
+    border: none;
+    cursor: pointer !important;
+    position: relative !important;
+}
+
+a.loader-default:focus,
+button.loader-default:focus,
+button[type="submit"].loader-default:focus {
+    outline: none !important;
+    background-color: var(--brand-green) !important;
+}
+
+a.loader-default--full,
+button.loader-default--full {
+    width: 100% !important;
+}
+
+a.loader-default.loader-default--primary:visited,
+button.loader-default.loader-default--primary:visited {
+    color: white !important;
+}
+
+body a.loader-default:hover,
+body button.loader-default:hover {
+    color: white !important;
+    background-color: var(--brand-green) !important;
+}
+
+a.loader-default--primary,
+button.loader-default--primary {
+    background-color: var(--brand-green) !important;
+    color: white !important;
+    font-style: normal !important;
+    text-decoration: none !important;
+}
+
+a.loader-default--primary:hover,
+button.loader-default--primary:hover {
+    color: white !important;
+}
+
+/* if loader-default is disabled don't use a cursor pointer */
+a.loader-default:disabled,
+button.loader-default:disabled {
+    cursor: not-allowed !important;
+    background-color: var(--brand-grey) !important;
+}
+
+/* if loader-default is disabled make sure the background is grey even on hover */
+a.loader-default:disabled:hover,
+button.loader-default:disabled:hover {
+    background-color: var(--brand-grey) !important;
+}
+
+a.tww-negative-action {
+    color: var(--red);
+    background-color: transparent;
+    text-decoration: none;
+}
+
+.loader-default svg {
+    margin-right: 10px !important;
+    width: 28px !important;
+    height: 28px !important;
+}
+
+@media (max-width: 768px) {
+    .card-plan.loader-default {
+        width: 100%;
+        margin: 10px 0;
+    }
+}
+
+.loader--inner-element {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.tww-form-submit-button {
+    padding: 20px 0;
+}
+
+button.tww-form-submit-button {
+    margin: 20px 0;
+}
+
+.current-membership--action-group {
+    width: 100%;;
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0px;
+    flex-wrap: wrap;
+}
+
+.current-membership--action-group a.tww-negative-action {
+    color: var(--red);
+    background-color: transparent;
+    font-size: 13px;
+}
+
+.current-membership--action-group a.tww-negative-action:visited {
+    color: var(--red) !important;
+}
+
+/* buttons */
+
+.tww-primary-button {
+    background-color: var(--brand-green);
+    color: var(--white);
+    padding: 10px 20px;
+    border-radius: 4px;
+    font-size: 14px;
+    font-weight: bold;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+/* status tags */
+
+span.tag {
+    margin-bottom: 10px;
+}
+
+span.status-tag {
+    border: 1px solid var(--border-beige);
+    border-radius: 4px;
+    margin: 10px 0;
+}
+
+span.status-tag {
+    padding: 5px 10px;
+    border-radius: 4px;
+    font-size: 14px;
+    line-height: 24px;
+    font-weight: bold;
+    display: inline-block;
+}
+
+.status-tag.active {
+    background: var(--active);
+    border: 1px solid var(--border-beige);
+    border-radius: 4px;
+    color: var(--active-alt);
+}
+
+.status-tag.canceled-but-active, 
+.status-tag.canceled-and-expired {
+    background: rgba(255, 8, 8, 0.35);
+    border: 1px solid var(--red);
+    color: var(--red);
+    border-radius: 4px;
+}
+
+.status-tag.lapsed {
+    color: rgb(107, 33, 168);
+    background-color: rgb(243, 232, 255);
+    border: 1px solid rgb(107, 33, 168);
+}
+
+.status-tag.suspended {
+    color: var(--tww-dark-grey);
+    background-color: var(--tww-beige);
+    border: 1px solid var(--tww-beige);
+}
+
+.status-tag.expired {
+    color: rgb(107, 33, 168);
+    background-color: rgb(243, 232, 255);
+    border: 1px solid rgb(107, 33, 168);
+}
+
+.status-tag.no-subscription {
+    color: var(--tww-dark-grey);
+    background-color: var(--tww-beige);
+    border: 1px solid var(--tww-beige);
+}
+
+/* edit username */
+
+.edit-username-form {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.edit-username-form i {
+    color: var(--brand-light-grey);
+    font-size: 15px;
+}
+
+.edit-username-form i {
+    color: var(--brand-beige);
+    font-size: 15px;
+}
+
+.edit-username-form label {
+    font-size: 14px;
+    line-height: 24px;
+    color: var(--brand-dark-grey);
+    margin-bottom: 5px;
+}
+
+.edit-username-form input[type=text],
+.edit-username-form input[type=email] {
+    margin-bottom: 10px;
+}
+
+@media (max-width: 768px) {
+    .edit-username-form button.loader-default {
+        width: 100%;
+    }  
+}
+
+span.required {
+    color: var(--tww-dark-grey);
+}
+
+.edit-username-form input.invalid,
+#tww-change-password-form input.invalid {
+    border: 1px solid  var(--red) !important;
+}
+
+#tww-change-password-form input.valid {
+    border: 1px solid var(--brand-green);
+}
+
+.edit-username-form input:focus,
+#tww-change-password-form input:focus {
+    border: 1px solid var(--brand-green) !important;
+}
+
+.tww-password-strength {
+    border-top: 1px solid var(--border-grey);
+    padding-top: 20px;
+    margin-top: 20px;
+}
+
+#tww-change-password-form {
+    max-width: 800px;
+}

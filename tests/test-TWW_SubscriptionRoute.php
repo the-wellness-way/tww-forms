@@ -73,4 +73,5 @@ class Test_TWW_SubscriptionRoute extends WP_UnitTestCase {
         $request = new \WP_REST_Request('POST', '/tww/v1/create-member');
         
         $request->set_query_params([]);
+    }
 }

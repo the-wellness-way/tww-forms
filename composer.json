@@ -13,6 +13,14 @@
             "TWWForms\\": "src/"
         }
     },
+<<<<<<< HEAD
+=======
+    "autoload-dev": {
+        "psr-4": {
+            "TWWForms\\Tests\\": "tests/"
+        }
+    },
+>>>>>>> merge
     "authors": [
         {
             "name": "The Wellness Way"

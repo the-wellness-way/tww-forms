@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 msgid ""
 msgstr ""
 "Project-Id-Version: Windows 3.11\n"
@@ -5,3 +6,12 @@ msgstr ""
 
 msgid "moon"
 msgstr "yuhu"
+=======
+msgid ""
+msgstr ""
+"Project-Id-Version: Windows 3.11\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+
+msgid "moon"
+msgstr "yuhu"
+>>>>>>> merge

@@ -50,9 +50,9 @@ class TWW_MembershipShortcode extends TWW_Shortcodes {
     }
 
     public function render_shortcode($atts, $content = null) {
-        if($this->sc_settings['handle']) {
-            wp_enqueue_script($this->sc_settings['handle']);
-        }
+        // if($this->sc_settings['handle']) {
+        //     wp_enqueue_script($this->sc_settings['handle']);
+        // }
 
         if(!$this->user->ID) {
             return '<p>You must be logged in to view this content</p>';

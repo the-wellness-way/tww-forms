@@ -16,9 +16,9 @@ class TWW_EditUsernameShortcode extends TWW_Shortcodes {
             'justify' => 'flex-start',
         ], $atts);
 
-        if($this->sc_settings['handle']) {
-            wp_enqueue_script($this->sc_settings['handle']);
-        }
+        // if($this->sc_settings['handle']) {
+        //     wp_enqueue_script($this->sc_settings['handle']);
+        // }
 
         if($this->validate_user(wp_get_current_user()) === false) {
             return 'You must be logged in to edit your username';

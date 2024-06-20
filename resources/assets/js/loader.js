@@ -1,14 +1,17 @@
-const twwLoaderSVG = 'loader-rings-white';
+import { config } from "./config.js";
+import { state } from "./state.js";
 
-const loaderDefault = () => {  
+export const twwLoaderSVG = 'loader-rings-white';
+
+export const loaderDefault = () => {  
     return createLoaderImage();
 }
 
-const loaderGif = () => {
+export const loaderGif = () => {
     return createGifLoader();
 }
 
-const createLoaderImage = (pathname) => {
+export const createLoaderImage = (pathname) => {
     pathname = pathname ?? config.loaders.default;
 
     const img = document.createElement('img');
@@ -18,12 +21,14 @@ const createLoaderImage = (pathname) => {
     return img;
 }
 
-const createGifLoader = (pathname) => {
+export const createGifLoader = (pathname) => {
     pathname = pathname ?? config.loaders.defaultGif;
 
     const img = document.createElement('img');
     img.src = `${state.iconsPath}${pathname}.gif`;
     img.alt = 'Loading...';
+    img.width = 20;
+    img.height = 20;
     img.classList.add('loadinggif');
 
     return img;

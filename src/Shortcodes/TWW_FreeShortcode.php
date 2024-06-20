@@ -5,13 +5,12 @@ class TWW_FreeShortcode extends TWW_Shortcodes {
     public function set_sc_settings() {
         $this->sc_settings = [
             'name' => 'tww_free_subscription',
-            'handle' => 'free-subscription-shortcode',
+            'handle' => 'tww-free-subscription-shortcode',
             'css_handle' => 'free-subscription-shortcode',
         ];
     }
 
     public function render_shortcode($atts, $content = null) {
-        wp_enqueue_script('free-subscription-shortcode');
         wp_enqueue_style('free-subscription-shortcode');
 
         $atts = shortcode_atts([

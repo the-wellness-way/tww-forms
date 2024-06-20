@@ -113,6 +113,9 @@ button.loader-default {
     border: none;
     cursor: pointer !important;
     position: relative !important;
+    outline: none;
+    border: 0;
+    cursor: pointer;
 }
 
 a.loader-default:focus,

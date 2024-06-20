@@ -110,11 +110,12 @@ button.btn-tww-registration div#tww-plus-button-loader svg {
 }
 
 .tww-negative-action span img.loadinggif,
-.tww-negative-action img.loadinggif {
+.tww-negative-action img.loadinggif,
+img.loadinggif {
     margin-right: 10px;
     margin-left: 10px;
-    width: 20px;
-    height: 20px;
+    width: 20px !important;
+    height: 20px !important;
 }
 
 body input#tww-plus-email::placeholder {

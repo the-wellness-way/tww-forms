@@ -1,4 +1,9 @@
-const initChangePasswordForm = () => {
+import { getEl, clearErrors, errorDiv, successDiv } from "../helpers.js";
+import { config } from "../config.js";
+import { state } from "../state.js";
+import { twwLoaderSVG } from "../loader.js";
+
+export const initChangePasswordForm = () => {
     const form = getEl(config.twwChangePasswordForm);
     clearErrors('#error-message', true);
     
@@ -12,36 +17,37 @@ const initChangePasswordForm = () => {
         let confirmPassword = form.querySelector('input[name="confirm_password"]');
         let submitButton = form.querySelector('button[type="submit"]');
 
-        if (event.target.type === 'password' && event.target.name !== 'current_password') {
-            if ((event.target.value.length > 0 && !validatePassword(event.target.value)) || currentPassword === newPassword) {
-                event.target.classList.add('invalid');
-                event.target.classList.remove('valid');
-            } else {
-                event.target.classList.remove('invalid');
-                event.target.classList.add('valid');
-            }
-
-            console.log('confirmPassword.value', confirmPassword.value)
-                console.log('newPassword.value', newPassword.value)
-
-            if((newPassword.value && newPassword.classList.contains('valid')) && confirmPassword.value != newPassword.value) {
-                confirmPassword.classList.add('invalid');
-                confirmPassword.classList.remove('valid');
-                console.log(confirmPassword.value)
-                console.log(newPassword.value)
-            } else if (newPassword.value && newPassword.value == confirmPassword.value) {
-                confirmPassword.classList.add('valid');
-                confirmPassword.classList.remove('invalid');
-                console.log('yodi')
-            } else {
-                confirmPassword.classList.remove('invalid');
-            }
+        if (event.target.name === 'current_password') {
+            event.target.classList.remove('invalid');
+            event.target.classList.add('valid');
         }
 
-        if (newPassword.value === confirmPassword.value && newPassword.classList.contains('valid') && confirmPassword.classList.contains('valid')) {
-            submitButton.disabled = false;
+        let currentPwdValid = currentPassword.value ?? false;
+        let newPwdValid = newPasswordIsValid(newPassword.value, currentPassword.value);
+        let confirmPwdValid = confirmPasswordIsValid(confirmPassword.value, newPassword.value, currentPassword.value);
+
+        if(false !== newPwdValid) {
+            newPassword.classList.add('valid')
+            newPassword.classList.remove('invalid')
+            console.log(newPassword.value)
+            console.log(newPwdValid)
         } else {
-            submitButton.disabled = true;   
+            newPassword.classList.add('invalid')
+            newPassword.classList.remove('valid')
+        }
+
+        if(false !== confirmPwdValid) {
+            confirmPassword.classList.add('valid')
+            confirmPassword.classList.remove('invalid')
+        } else {
+            confirmPassword.classList.add('invalid')
+            confirmPassword.classList.remove('valid')
+        }
+
+        if(currentPwdValid && newPwdValid && confirmPwdValid) {
+            submitButton.disabled = false
+        } else {
+            submitButton.disabled = true
         }
     });
 
@@ -88,14 +94,46 @@ const initChangePasswordForm = () => {
     });
 }
 
+export const newPasswordIsValid = (newPwd, currentPwd = null) => {
+    if(!newPwd && currentPwd) {
+        return false
+    }
+
+    if(!newPwd && !currentPwd) {
+        return null;
+    }
+
+    if(newPwd == currentPwd) {
+        return false;
+    }
+
+    return validatePassword(newPwd);
+}
+
+export const confirmPasswordIsValid = (confirmPwd = null, newPwd = null, currentPwd) => {
+    if(!confirmPwd && !newPwd && currentPwd) {
+        return false;
+    }
+
+    if(!confirmPwd && !newPwd) {
+        return null;
+    }
+
+    if(confirmPwd != newPwd) {
+        return false;
+    }
+
+    return validatePassword(confirmPwd);
+}
+
 //The password should contain at least 8 characters, one uppercase letter, one lowercase letter, and one number
-const validatePassword = (password) => {
+export const validatePassword = (password) => {
     const passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$/;
 
     return passwordRegex.test(password);
 }
 
-const changePasswordRequest = async (data) => {
+export const changePasswordRequest = async (data) => {
     const response = await fetch(state.endpoints.changePassword, {
         method: 'POST',
         body: JSON.stringify(data),
@@ -106,7 +144,3 @@ const changePasswordRequest = async (data) => {
 
     return await response.json();
 }
-
-(function() {
-    initChangePasswordForm();
-})();

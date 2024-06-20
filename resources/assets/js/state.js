@@ -1,4 +1,6 @@
-const state = {
+import { config } from './config.js';
+
+export const state = {
     restNonce: window.twwForms.restNonce,
     restUrl: window.twwForms.siteUrl + '/wp-json/tww/v1',
     siteUrl: window.twwForms.siteUrl,
@@ -16,6 +18,6 @@ const state = {
     }
 }
 
-const setState = (key, value) => {
+export const setState = (key, value) => {
     state[key] = value;
 }

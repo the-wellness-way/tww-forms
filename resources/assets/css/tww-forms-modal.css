@@ -1,5 +1,5 @@
 :root {
-    --brand-green: rgb(128, 183, 65);
+    --brand-green: #80b741;
     --brand-grey: rgb(136, 136, 136);
     --border-grey: rgb(204, 204, 204);
     --border-grey-light: rgb(238, 238, 238);
@@ -50,6 +50,8 @@
     height: 100%;
     display: flex;
     z-index: 9999;
+    background-color: rgba(242, 243, 243, 0.9);
+    background-color: rgba(0,0,0, .6);
 }
 
 .tww-change-plan-modal--inner,
@@ -123,4 +125,8 @@
 
 input.invalid {
     border: 1px solid #b32d2e !important;
+}
+
+.tww-modal-link {
+    cursor: pointer;
 }

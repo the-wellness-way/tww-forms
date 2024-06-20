@@ -2,7 +2,7 @@
 /**
  * Plugin Name: TWW Forms
  * Description: Custom forms for TWW Plus registration
- * Version: 1.0
+ * Version: 1.0.0
  * Author: The Wellness Way
  * Author URI: https://www.thewellnessway.com
  * License: GPL2
@@ -28,10 +28,10 @@
  }
 
  if(!defined('TWW_FORMS_ASSETS_VERSION')) {
-     define('TWW_FORMS_ASSETS_VERSION', '1.0.95');
+     define('TWW_FORMS_ASSETS_VERSION', '1.0.98');
  }
 
- require_once 'vendor/autoload.php';
+require_once 'vendor/autoload.php';
 
 if (!is_plugin_active('memberpress/memberpress.php')) {
     add_action('admin_notices', function() {
@@ -86,16 +86,16 @@ function tww_register_scripts() {
         'current_user_id' => get_current_user_id(),
     ]);
 
-    wp_register_script('tww-helpers', TWW_FORMS_PLUGIN_URL . 'resources/assets/js/helpers.js', [], $version, true);
-    wp_register_script('tww-config', TWW_FORMS_PLUGIN_URL . 'resources/assets/js/config.js', [], $version, true);
-    wp_register_script('tww-state', TWW_FORMS_PLUGIN_URL . 'resources/assets/js/state.js', [], $version, true);
-    wp_register_script('tww-loader', TWW_FORMS_PLUGIN_URL . 'resources/assets/js/loader.js', [], $version, true);
-    wp_register_script('tww-index', TWW_FORMS_PLUGIN_URL . 'resources/dist/index.bundle.js', [], $version, true);
+    // wp_register_script('tww-helpers', TWW_FORMS_PLUGIN_URL . 'resources/assets/js/helpers.js', [], $version, true);
+    // wp_register_script('tww-config', TWW_FORMS_PLUGIN_URL . 'resources/assets/js/config.js', [], $version, true);
+    // wp_register_script('tww-state', TWW_FORMS_PLUGIN_URL . 'resources/assets/js/state.js', [], $version, true);
+    // wp_register_script('tww-loader', TWW_FORMS_PLUGIN_URL . 'resources/assets/js/loader.js', [], $version, true);
+    // wp_register_script('tww-index', TWW_FORMS_PLUGIN_URL . 'resources/dist/index.bundle.js', [], $version, true);
 
-    wp_enqueue_script('tww-helpers');
-    wp_enqueue_script('tww-config');
-    wp_enqueue_script('tww-state');
-    wp_enqueue_script('tww-loader');
+    // wp_enqueue_script('tww-helpers');
+    // wp_enqueue_script('tww-config');
+    // wp_enqueue_script('tww-state');
+    // wp_enqueue_script('tww-loader');
     // wp_enqueue_script('tww-index');
 }
 
@@ -123,6 +123,8 @@ use TWWForms\Shortcodes\TWW_MembershipShortcode;
 use TWWForms\Shortcodes\TWW_EditUsernameShortcode;
 use TWWForms\Shortcodes\TWW_EmailShortcode;
 use TWWForms\Shortcodes\TWW_ChangePasswordShortcode;
+use TWWForms\Shortcodes\TWW_LogoutLinkShortcode;
+use TWWForms\Shortcodes\TWW_ModalLinkShortcode;
 
 use TWWForms\Controllers\TWW_PasswordCtrl;
 
@@ -139,8 +141,22 @@ add_action('init', function() {
     $twwEditUsernameShortcode = new TWW_EditUsernameShortcode();
     $twwEmailShortcode = new TWW_EmailShortcode();
     $twwChangePasswordShortcode = new TWW_ChangePasswordShortcode();
+    $twwLogoutLinkShortcode = new TWW_LogoutLinkShortcode();
+    $twwModalLinkShortcode = new TWW_ModalLinkShortcode();
 
     $pwdCtrl = new TWW_PasswordCtrl();
 });
+
+function enqueue_webpack_dev_server_script() {
+   
+        $file = false !== strpos($_SERVER['HTTP_HOST'],'localhost:8081') ? 'main' : 'index';
+        $version = false !== strpos($_SERVER['HTTP_HOST'],'localhost:8081') ? null : TWW_FORMS_ASSETS_VERSION;
+        $url = trailingslashit(site_url()) . 'wp-content/plugins/tww-forms/resources/dist/'.$file.'.bundle.js';
+        wp_register_script('webpack-dev-server', $url, array(), $version, true);
+        wp_enqueue_script('webpack-dev-server');
+}
+
+add_action('wp_enqueue_scripts', 'enqueue_webpack_dev_server_script');
+  
 
 

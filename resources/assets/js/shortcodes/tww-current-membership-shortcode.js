@@ -1,4 +1,9 @@
-const initCancelSubscription = () => {
+import { getEl, getAll, clearErrors, errorDiv, successDiv } from "../helpers.js";
+import { config } from "../config.js";
+import { state } from "../state.js";
+import { twwLoaderSVG, loaderGif } from "../loader.js";
+
+export const initCancelSubscription = () => {
     const cancelButton = getEl(config.twwCancelSubscription);
     const messageContainer = getEl(config.twwApiResponse);
 
@@ -22,7 +27,7 @@ const initCancelSubscription = () => {
     }
 }
 
-const cancelSubscription = async () => {
+export const cancelSubscription = async () => {
     let data = {
         active_subscription_id: state.activeSubscriptionId
     }
@@ -39,7 +44,7 @@ const cancelSubscription = async () => {
     return await response.json();
 }
 
-const initChangePlanModal = () => { 
+export const initChangePlanModal = () => { 
     const changePlanModal = getEl(config.twwChangePlanModal);
     const changePlanButton = getEl(config.twwChangePlanButton);
     const changePlanModalButton = getEl(config.twwModalChangePlanButton);
@@ -76,7 +81,3 @@ const initChangePlanModal = () => {
     }
 }
 
-(function() {
-    initCancelSubscription();
-    initChangePlanModal();
-})();

@@ -28,7 +28,7 @@
  }
 
  if(!defined('TWW_FORMS_ASSETS_VERSION')) {
-     define('TWW_FORMS_ASSETS_VERSION', '1.0.98');
+     define('TWW_FORMS_ASSETS_VERSION', '1.0.99');
  }
 
 require_once 'vendor/autoload.php';
@@ -70,8 +70,8 @@ function tww_register_styles() {
 }
 
 use TWWForms\Controllers\TWW_SubscriptionsCtrl;
-
 add_action('wp_enqueue_scripts', 'tww_register_scripts');
+
 function tww_register_scripts() {
     $version = TWW_FORMS_ASSETS_VERSION;
 
@@ -125,12 +125,12 @@ use TWWForms\Shortcodes\TWW_EmailShortcode;
 use TWWForms\Shortcodes\TWW_ChangePasswordShortcode;
 use TWWForms\Shortcodes\TWW_LogoutLinkShortcode;
 use TWWForms\Shortcodes\TWW_ModalLinkShortcode;
+use TWWForms\Shortcodes\TWW_Grams2OuncesShortcode;
 
 use TWWForms\Controllers\TWW_PasswordCtrl;
 
 add_action('init', function() {
     //$twwEmail = new TWW_Email();
-
     $subcripton_id  = TWW_SubscriptionsCtrl::get_last_subscription_id();
     $subcription    = new MeprSubscription($subcripton_id);
     $product        = new MeprProduct($subcription->product_id);
@@ -143,13 +143,14 @@ add_action('init', function() {
     $twwChangePasswordShortcode = new TWW_ChangePasswordShortcode();
     $twwLogoutLinkShortcode = new TWW_LogoutLinkShortcode();
     $twwModalLinkShortcode = new TWW_ModalLinkShortcode();
+    $twwGrams2Ounceshortcode = new TWW_Grams2OuncesShortcode();
 
     $pwdCtrl = new TWW_PasswordCtrl();
 });
 
 function enqueue_webpack_dev_server_script() {
-   
-        $file = false !== strpos($_SERVER['HTTP_HOST'],'localhost:8081') ? 'main' : 'index';
+        $mode  = 'prod';
+        $file = false !== strpos($_SERVER['HTTP_HOST'],'localhost:8081') && 'prod' !== $mode ? 'main' : 'index';
         $version = false !== strpos($_SERVER['HTTP_HOST'],'localhost:8081') ? null : TWW_FORMS_ASSETS_VERSION;
         $url = trailingslashit(site_url()) . 'wp-content/plugins/tww-forms/resources/dist/'.$file.'.bundle.js';
         wp_register_script('webpack-dev-server', $url, array(), $version, true);

@@ -1,0 +1,62 @@
+.grams2ounces-container {
+    --brand-green: rgb(128, 183, 65);
+    --brand-grey: rgb(136, 136, 136);
+    --border-grey: rgb(204, 204, 204);
+    --border-grey-light: rgb(238, 238, 238);
+
+    --tww-green: #80b741;
+    --tww-dark-grey: #414444;
+    --tww-medium-grey: #6d6d6d;
+    --tww-medium-light-grey: #a8a8a8;
+    --tww-light-grey: #ddddde;
+    --tww-beige: #dcd4cb;
+
+    --tww-white: white;
+
+    --black: rgb(0, 0, 0);
+    --red: rgb(153, 27, 27);
+
+    --active: rgb(220, 252, 231);
+    --active-alt: rgb(22, 101, 52);
+    --canceled: var(--red);
+    --pending: rgb(255, 255, 0);
+}
+
+.grams2ounces__form input[type=number] {
+    background-color: white;
+    border-radius: 4px 4px 0 0;
+    padding: 10px;
+    font-family: inherit;
+    line-height: 24px;
+    color: var(--tww-dark-grey);
+    border: 1px solid var(--tww-light-grey);
+    transition: all .2s ease;
+    outline: none;
+}
+
+.grams2ounces__form input:focus, 
+.grams2ounces__form select:focus {
+    border: 1px solid;
+    outline: none;
+    border-color: var(--tww-light-grey) !important;
+}
+
+.grams2ounces__form label {
+	display: block;
+	background-color: var(--tww-light-grey);
+	padding: 10px;
+	font-size: 14px;
+	border-radius: 0 0 4px 4px;
+}
+
+.grams2ounces__conversion-group {
+    display: flex;
+    align-items: center;
+}
+
+.grams2ounces__comparison {
+    padding: 0 10px;
+    font-size: 22px;
+    line-height: normal;
+    font-weight: bold;
+}

@@ -9,7 +9,7 @@ const __dirname = path.dirname(__filename);
 export default {
   mode: 'development',
   entry: [
-    'webpack-dev-server/client?http://localhost:8082',
+    'webpack-dev-server/client?http://localhost:8088',
     'webpack/hot/only-dev-server',
     path.resolve(__dirname, '../assets/js/index.js'),
   ],
@@ -40,7 +40,7 @@ export default {
       directory: path.resolve(__dirname, '../dist'),
     },
     hot: true,
-    port: 8082,
+    port: 8088,
     host: '0.0.0.0',
     proxy: [
         {

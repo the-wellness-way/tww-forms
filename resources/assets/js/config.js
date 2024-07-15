@@ -28,7 +28,8 @@ export const config = {
         twwPlusSuccess: 'tww-plus-success',
         twwPlusError: 'tww-plus-error',
         twwchangePlanModalClose: 'tww-change-plan-modal-close',
-        twwLoginModal: 'tww-modal-link'
+        twwLoginModal: 'tww-modal-link',
+        grams2Ounces: 'grams2ounces__form'
     },
     loaders: {
         default: 'loader-rings-white',

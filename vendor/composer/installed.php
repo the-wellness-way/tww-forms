@@ -3,7 +3,7 @@
         'name' => 'prudy/tww-forms',
         'pretty_version' => 'dev-main',
         'version' => 'dev-main',
-        'reference' => 'dce117f0363e45890dc1f16b47356d7fa14422a3',
+        'reference' => '9cb4818efb02ab06e63655c7a1c90d297c016fb8',
         'type' => 'wordpress-plugin',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -130,7 +130,7 @@
         'prudy/tww-forms' => array(
             'pretty_version' => 'dev-main',
             'version' => 'dev-main',
-            'reference' => 'dce117f0363e45890dc1f16b47356d7fa14422a3',
+            'reference' => '9cb4818efb02ab06e63655c7a1c90d297c016fb8',
             'type' => 'wordpress-plugin',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),

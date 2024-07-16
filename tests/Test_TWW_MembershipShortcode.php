@@ -35,10 +35,10 @@ class Test_Expired_MeprTransaction extends \MeprTransaction {
             'amount'          => 11.99,
             'total'           => 11.99,
             'status'          => 'complete',
-            'txn_type'        => 'subscription_confirmation',
+            'txn_type'        => 'payment',
             'gateway'         => 'Stripe',
             'prorated'        => null,
-            'created_at'      => date("Y-m-d H:i:s", $this->time_two_days_before()),
+            'created_at'      => date("Y-m-d H:i:s", $this->time_three_days_before()),
             'expires_at'      => date("Y-m-d H:i:s", $this->time_day_before()), // should be yesterday
             'subscription_id' => 44,
             'order_id' => 1,
@@ -47,12 +47,45 @@ class Test_Expired_MeprTransaction extends \MeprTransaction {
 
     public function time_day_before() {
         // Add 86400 seconds (1 day) to the current time
-        return time() - 86400;
+        return time() - 86400 * 3;
     }
 
-    public function time_two_days_before() {
+    public function time_three_days_before() {
         // Add 86400 seconds (1 day) to the current time
-        return time() - 86400 * 2;
+        return time() - 86400 * 4;
+    }
+}
+
+class Test_Expired_MeprSubscription extends \MeprSubscription {
+    protected function mgm_first_txn_id($mgm, $val = '') {
+        return 101;
+    }
+
+    protected function mgm_last_txn_id($mgm, $val = '') {
+        return 101;
+    }
+
+    public function first_txn() {
+        return new Test_Expired_MeprTransaction();
+    }
+    public function latest_txn() {
+        return new Test_Expired_MeprTransaction();
+    }
+    public function latest_txn_failed() {
+        return false;
+    }
+
+    protected function mgm_expiring_txn_id($mgm, $val = '') {
+        return 101;
+    }
+
+    protected function mgm_expires_at($mgm, $val = '') {
+        return $this->time_three_days_before();
+    }
+
+    public function time_three_days_before() {
+        // Add 86400 seconds (1 day) to the current time
+        return time() - 86400 * 3;
     }
 }
 
@@ -66,7 +99,7 @@ class Test_MeprSubscription extends \MeprSubscription {
     }
 }
 
-class TWW_Test_MembershipShortcode extends WP_UnitTestCase {
+class Test_TWW_MembershipShortcode extends WP_UnitTestCase {
     private $product;
 
     private $transaction;
@@ -85,6 +118,7 @@ class TWW_Test_MembershipShortcode extends WP_UnitTestCase {
             'post_id' => 99,
             'name' => 'Test Product',
             'price' => 11.99,
+            'period_type' => 'months'
         ]);
 
         $this->transaction = new MeprTransaction([
@@ -113,7 +147,26 @@ class TWW_Test_MembershipShortcode extends WP_UnitTestCase {
             'product_id'          => 1,
             'status'              => 'active',
             // I need a random string in datetime mysql format, for example '2021-09-01 00:00:00'
-            'created_at'          => '2024-09-01 24:04:14',
+            'created_at'          => '2023-09-01 24:04:14',
+            'total'               => 11.99,
+            'tax_class'           => 'standard',
+            'cc_last4'            => 1111,
+            'cc_exp_month'        => 10,
+            'cc_exp_year'         => 2028,
+            'token'               => 'tokenrandom',
+            // random yet
+            'order_id'            => 1,
+        ]);
+
+        $this->expired_subscription = new Test_Expired_MeprSubscription([
+            'id'                  => 44,
+            'subscr_id'           => 'mp-sub-'.uniqid(),
+            'gateway'             => 'manual',
+            'user_id'             => 1,
+            'product_id'          => 1,
+            'status'              => 'active',
+            // I need a random string in datetime mysql format, for example '2021-09-01 00:00:00'
+            'created_at'          => '2023-09-01 24:04:14',
             'total'               => 11.99,
             'tax_class'           => 'standard',
             'cc_last4'            => 1111,
@@ -173,14 +226,14 @@ class TWW_Test_MembershipShortcode extends WP_UnitTestCase {
     public function test_get_subscription_latest_txn() {
         $twwMemeberShipMock = $this->getMockBuilder(TWW_MembershipShortcode::class)
             ->setConstructorArgs([null, $this->subscription, null])
-            ->setMethods(['get_subscription_latest_txn'])
+            ->onlyMethods(['subscription_latest_txn'])
             ->getMock();
 
         $twwMemeberShipMock->expects($this->once())
-            ->method('get_subscription_latest_txn')
+            ->method('subscription_latest_txn')
             ->willReturn($this->transaction);
 
-        $this->assertEquals($twwMemeberShipMock->get_subscription_latest_txn()->id, $this->transaction->id);
+        $this->assertEquals($twwMemeberShipMock->subscription_latest_txn()->id, $this->transaction->id);
     }
 
     /**
@@ -190,14 +243,14 @@ class TWW_Test_MembershipShortcode extends WP_UnitTestCase {
     public function test_get_subscription_latest_txn_without_txn() {
         $twwMemeberShipMock = $this->getMockBuilder(TWW_MembershipShortcode::class)
             ->setConstructorArgs([null, $this->subscription_without_txn, null])
-            ->setMethods(['get_subscription_latest_txn'])
+            ->onlyMethods(['subscription_latest_txn'])
             ->getMock();
 
         $twwMemeberShipMock->expects($this->once())
-            ->method('get_subscription_latest_txn')
+            ->method('subscription_latest_txn')
             ->willReturn(null);
 
-        $this->assertEquals($twwMemeberShipMock->get_subscription_latest_txn(), null);
+        $this->assertEquals($twwMemeberShipMock->subscription_latest_txn(), null);
     }
 
     public function test_subscription_in_grace_period() {
@@ -207,9 +260,8 @@ class TWW_Test_MembershipShortcode extends WP_UnitTestCase {
     }
 
     public function test_expired_scenario_produces_expired_string() {
-        $tww_membership = new TWW_MembershipShortcode(null, $this->subscription, $this->expired_transaction);
-
-        $this->assertEquals($tww_membership->print_status_tag(), '<span class="membership-status expired">Expired</span>');
+        $tww_membership = new TWW_MembershipShortcode(null, $this->expired_subscription, $this->expired_transaction);
+        $this->assertEquals('<span class="status-tag expired">Expired</span>', $tww_membership->print_status_tag());
     }
 }
 

@@ -75,13 +75,27 @@ add_action('wp_enqueue_scripts', 'tww_register_scripts');
 function tww_register_scripts() {
     $version = TWW_FORMS_ASSETS_VERSION;
 
+    if(!class_exists('MeprSubscription')) {
+        return;
+    }
+
+    $sub = new \MeprSubscription(TWW_SubscriptionsCtrl::get_last_subscription_id());
+
+    $date = new DateTime($sub->expires_at);
+    $now = new DateTime();
+    $is_expired = $date < $now;
+
     wp_register_script('tww-forms', TWW_FORMS_PLUGIN_URL . 'resources/assets/js/tww-forms.js', [], $version, true);
     wp_enqueue_script('tww-forms');
     wp_localize_script('tww-forms', 'twwForms', [
         'siteUrl' => site_url(),
         'iconsPath' => TWW_FORMS_PLUGIN_URL . 'resources/assets/images/icons/',
         'restNonce' => wp_create_nonce('wp_rest'),
-        'active_subscription_id' => TWW_SubscriptionsCtrl::get_last_subscription_id() ?? null,
+        'active_subscription_id' => $sub->id ?? null,
+        'subscription_created_at' => $sub->created_at,
+        'subscription_status' => $sub->status,
+        'subscriptionExpired' => $is_expired,
+        'membership_id' => TWW_SubscriptionsCtrl::get_membership_id_from_last_subscription(),
         'forgot_password_url' => site_url() . '/login/?action=forgot_password',
         'current_user_id' => get_current_user_id(),
     ]);
@@ -100,12 +114,16 @@ function tww_register_scripts() {
 }
 
 use TWWForms\Routes\TWW_SubscriptionRoute;
+use TWWForms\Routes\TWW_TransactionsRoute;
 use TWWForms\Routes\TWW_CancelRoute;
 use TWWForms\Routes\TWW_LoginRoute;
 use TWWForms\Routes\TWW_ChangePasswordRoute;
 
 $twwSubscriptionRoutes = new TWW_SubscriptionRoute();
 add_action('rest_api_init', [$twwSubscriptionRoutes, 'boot']);
+
+$twwTransactionsRoutes = new TWW_TransactionsRoute();
+add_action('rest_api_init', [$twwTransactionsRoutes, 'boot']);
 
 $twwCancelRoute = new TWW_CancelRoute();
 add_action('rest_api_init', [$twwCancelRoute, 'boot']);

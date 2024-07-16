@@ -1,7 +1,7 @@
 <?php
 use TWWForms\Routes\TWW_CancelRoute;
 
-class Test_TWW_Cancel_Route extends WP_UnitTestCase {
+class Test_TWW_CancelRoute extends WP_UnitTestCase {
     private $subscription;
     
     public function setUp(): void {

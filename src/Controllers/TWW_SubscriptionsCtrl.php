@@ -18,6 +18,7 @@ class TWW_SubscriptionsCtrl {
         }
 
         $mepr_current_user = \MeprUtils::get_currentuserinfo();
+       // var_dump($mepr_current_user);
 
         if(!$mepr_current_user) {
             return null;
@@ -40,7 +41,7 @@ class TWW_SubscriptionsCtrl {
             )
         ),
         $sub_cols
-        );
+    );        
 
         return $table['results'] ?? null;
     }
@@ -50,6 +51,19 @@ class TWW_SubscriptionsCtrl {
 
         if($subscription && $subscription->id) {
             return $subscription->id;
+        }
+
+        return null;
+    }
+
+    public static function get_membership_id_from_last_subscription() {
+        $subscription_id = self::get_last_subscription_id();
+        $subscription = new \MeprSubscription($subscription_id);
+
+        if($subscription) {
+            $product = $subscription->product();
+
+            return $product->ID;
         }
 
         return null;

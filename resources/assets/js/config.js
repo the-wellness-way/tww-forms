@@ -14,6 +14,8 @@ export const config = {
     twwModalChangePlanButton: 'tww-modal-change-plan-button',
     twwChangePlanSelection: 'tww-change-plan-selection',
     twwChangePlanSelectionButton: 'tww-change-plan-selection-button',
+    twwResumeMembershipButton: 'tww-resume-membership',
+    twwResumeMembershipWithTransaction: 'tww-resume-membership-with-transaction',
     twwApiResponse: 'tww-api-response',
     twwEditUserName: 'tww-edit-user-name',
     twwEditUserNameForm: 'tww-edit-user-name-form',
@@ -34,6 +36,7 @@ export const config = {
     loaders: {
         default: 'loader-rings-white',
         defaultGif: 'loading',
+        loadinggif: 'loadinggif'
     },
     twwLoginForm: 'tww-login-form',
     twwChangePasswordForm: 'tww-change-password-form',

@@ -97,7 +97,7 @@ class TWW_MembershipShortcode extends TWW_Shortcodes {
             $scenario = self::$canceled_and_expired_str;
         }
         
-        if (self::$active_str === $status && !$in_grace_period && ($latest_txn_failed || false !== strpos($status, 'No'))) {
+        if (self::$active_str === $status && !$in_grace_period && $latest_txn_failed) {
             $scenario = self::$lapsed_str;
         }
         
@@ -176,6 +176,16 @@ class TWW_MembershipShortcode extends TWW_Shortcodes {
         return $string;
     }
 
+    public function print_resume_button($expired) {
+
+        $id = $expired ? 'tww-resume-membership-with-transaction' : 'tww-resume-membership';
+        return sprintf(
+        '<a id="'.$id.'" href="#" class="loader-default--primary loader-default">
+            <span class="loader--inner-element"></span>
+            Resume Membership
+        </a>');
+    }
+
     public function print_renewel_button() {
         $renewal_link = $this->user->renewal_link($this->transaction->id);
 
@@ -247,12 +257,27 @@ class TWW_MembershipShortcode extends TWW_Shortcodes {
             
             if (self::$canceled_but_active_str === $scenario || self::$canceled_and_expired_str === $scenario) {
                 $html_group_card_plan .= $this->print_card_plan_buttons();
-                $html_group_card_plan .= $this->print_renewel_button();
+
+                $expired_class = self::$canceled_but_active_str === $scenario ? false : true;
+
+                $renewal_or_resume = $this->print_renewel_button();
+                if('' === $renewal_or_resume) {
+                    $renewal_or_resume = $this->print_resume_button($expired_class);
+                }
+
+                $html_group_card_plan .= $renewal_or_resume;
             }
             
             if (self::$expired_str === $scenario) {
                 $html_group_card_plan .= $this->print_card_plan_buttons();
-                $html_group_card_plan .= $this->print_renewel_button();
+
+                $renewal_or_resume = $this->print_renewel_button();
+                if('' === $renewal_or_resume) {
+                    $renewal_or_resume = $this->print_resume_button(true);
+                }
+
+                $html_group_card_plan .= $renewal_or_resume;
+                
             }
             
             if (self::$lapsed_str === $scenario || self::$suspended_str === $scenario) {

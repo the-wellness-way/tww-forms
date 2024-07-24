@@ -10,7 +10,8 @@
     "license": "GPL2",
     "autoload": {
         "psr-4": {
-            "TWWForms\\": "src/"
+            "TWWForms\\": "src/",
+            "TWWFormsTests\\": "tests"
         }
     },
     "authors": [

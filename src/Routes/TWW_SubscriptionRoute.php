@@ -101,6 +101,7 @@ class TWW_SubscriptionRoute extends TWW_Routes {
         if($response_body && array_key_exists('id', $response_body) && !current_user_can('manage_options')) {
             $user = new \MeprUser($response_body['id']);
             $wp_user = get_user_by('email', $params['email']);
+            
             if($user->ID) {
                 wp_set_current_user($user->ID);
                 wp_set_auth_cookie($user->ID);
@@ -193,8 +194,8 @@ class TWW_SubscriptionRoute extends TWW_Routes {
         $created_at = $subscription->created_at;
         $subscr_id = $subscription->subscr_id;
     
-        $mp_endpoint = '/wp-json/mp/v1/subscriptions/' . $subscription_id;
-        $url = 'http://192.168.192.4:80' . $mp_endpoint;
+        $mp_endpoint = 'wp-json/mp/v1/subscriptions/' . $subscription_id;
+        $url = trailingslashit($this->get_site_url()) . $mp_endpoint;
     
         $data = [
             'subscr_id' => $subscr_id,

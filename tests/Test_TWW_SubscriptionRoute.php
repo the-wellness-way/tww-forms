@@ -26,7 +26,7 @@ class Test_TWW_SubscriptionRoute extends WP_UnitTestCase {
                 'body' => json_encode([
                     'status' => 'success',
                     'message' => 'Member created successfully',
-                    'redirect' => $params['redirect_url'] ?? '',
+                    'redirect' => '',
                     'data' => []
                 ]),
             ];

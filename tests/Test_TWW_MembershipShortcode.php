@@ -31,38 +31,55 @@ class Test_MeprTransaction extends \MeprTransaction {
 class Test_Expired_MeprTransaction extends \MeprTransaction {
     public function __construct() {
         parent::__construct([
-            'id'              => 101,
+            'id'              => 103,
             'amount'          => 11.99,
             'total'           => 11.99,
             'status'          => 'complete',
             'txn_type'        => 'payment',
             'gateway'         => 'Stripe',
             'prorated'        => null,
-            'created_at'      => date("Y-m-d H:i:s", $this->time_three_days_before()),
-            'expires_at'      => date("Y-m-d H:i:s", $this->time_day_before()), // should be yesterday
-            'subscription_id' => 44,
-            'order_id' => 1,
+            'created_at'      => date("Y-m-d H:i:s", $this->time_four_days_before()),
+            'expires_at'      => date("Y-m-d H:i:s", $this->time_three_days_before()), // should be yesterday
+            'subscription_id' => 46,
+            'order_id' => 3,
         ]);
     }
 
-    public function time_day_before() {
+    public function time_three_days_before() {
         // Add 86400 seconds (1 day) to the current time
         return time() - 86400 * 3;
     }
 
-    public function time_three_days_before() {
+    public function time_four_days_before() {
         // Add 86400 seconds (1 day) to the current time
         return time() - 86400 * 4;
     }
 }
 
 class Test_Expired_MeprSubscription extends \MeprSubscription {
-    protected function mgm_first_txn_id($mgm, $val = '') {
-        return 101;
+    public function __construct($obj = null) {
+        parent::__construct([
+            'id'                  => 46,
+            'subscr_id'           => 'mp-sub-'.uniqid(),
+            'gateway'             => 'manual',
+            'user_id'             => 1,
+            'product_id'          => 1,
+            'status'              => 'active',
+            // I need a random string in datetime mysql format, for example '2021-09-01 00:00:00'
+            'created_at'          => '2023-09-01 24:04:14',
+            'total'               => 11.99,
+            'tax_class'           => 'standard',
+            'cc_last4'            => 1111,
+            'cc_exp_month'        => 10,
+            'cc_exp_year'         => 2028,
+            'token'               => 'tokenrandom',
+            // random yet
+            'order_id'            => 3,
+        ]);
     }
 
-    protected function mgm_last_txn_id($mgm, $val = '') {
-        return 101;
+    protected function mgm_first_txn_id($mgm, $val = '') {
+        return 103;
     }
 
     public function first_txn() {
@@ -76,16 +93,16 @@ class Test_Expired_MeprSubscription extends \MeprSubscription {
     }
 
     protected function mgm_expiring_txn_id($mgm, $val = '') {
-        return 101;
+        return 103;
     }
 
     protected function mgm_expires_at($mgm, $val = '') {
-        return $this->time_three_days_before();
+        return $this->time_four_days_before();
     }
 
-    public function time_three_days_before() {
+    public function time_four_days_before() {
         // Add 86400 seconds (1 day) to the current time
-        return time() - 86400 * 3;
+        return time() - 86400 * 4;
     }
 }
 
@@ -111,6 +128,8 @@ class Test_TWW_MembershipShortcode extends WP_UnitTestCase {
     private $transaction_subscription_confirmation;
 
     private $expired_transaction;
+
+    private $expired_subscription;
 
     public function setUp() : void {
         $this->product = new MeprProduct([
@@ -158,24 +177,7 @@ class Test_TWW_MembershipShortcode extends WP_UnitTestCase {
             'order_id'            => 1,
         ]);
 
-        $this->expired_subscription = new Test_Expired_MeprSubscription([
-            'id'                  => 44,
-            'subscr_id'           => 'mp-sub-'.uniqid(),
-            'gateway'             => 'manual',
-            'user_id'             => 1,
-            'product_id'          => 1,
-            'status'              => 'active',
-            // I need a random string in datetime mysql format, for example '2021-09-01 00:00:00'
-            'created_at'          => '2023-09-01 24:04:14',
-            'total'               => 11.99,
-            'tax_class'           => 'standard',
-            'cc_last4'            => 1111,
-            'cc_exp_month'        => 10,
-            'cc_exp_year'         => 2028,
-            'token'               => 'tokenrandom',
-            // random yet
-            'order_id'            => 1,
-        ]);
+        $this->expired_subscription = new Test_Expired_MeprSubscription();
 
         $this->subscription_without_txn = new MeprSubscription([
             'id'                  => 105,
@@ -260,8 +262,9 @@ class Test_TWW_MembershipShortcode extends WP_UnitTestCase {
     }
 
     public function test_expired_scenario_produces_expired_string() {
-        $tww_membership = new TWW_MembershipShortcode(null, $this->expired_subscription, $this->expired_transaction);
-        $this->assertEquals('<span class="status-tag expired">Expired</span>', $tww_membership->print_status_tag());
+        $tww_membership_new = new TWW_MembershipShortcode(null, $this->expired_subscription, $this->expired_transaction);
+
+        $this->assertEquals('<span class="status-tag expired">Expired</span>', $tww_membership_new->print_status_tag());
     }
 }
 

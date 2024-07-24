@@ -109,6 +109,14 @@ button.btn-tww-registration div#tww-plus-button-loader svg {
     align-items: center;
 }
 
+.tww-positive-action {
+    color: var(--tww-green);
+    background-color: transparent;
+    font-size: 13px;
+    display: flex;
+    align-items: center;
+}
+
 .tww-negative-action span img.loadinggif,
 .tww-negative-action img.loadinggif,
 img.loadinggif {

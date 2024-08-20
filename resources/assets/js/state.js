@@ -14,6 +14,7 @@ export const state = {
     currentUserId: window.twwForms.current_user_id,
     forgotPasswordUrl: window.twwForms.forgotPasswordUrl,
     endpoints: {
+        createTransaction: config.restUrl + '/create-transaction',
         updateSubscription: config.restUrl + '/update-subscription',
         cancelSubscription: config.restUrl + '/cancel-subscription',
         resumeSubscription: config.restUrl + '/update-subscription',

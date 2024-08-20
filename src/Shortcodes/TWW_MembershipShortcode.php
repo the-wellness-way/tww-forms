@@ -41,8 +41,8 @@ class TWW_MembershipShortcode extends TWW_Shortcodes {
     }
 
     public function __construct(\MeprProduct $product = null, \MeprSubscription $subscription, \MeprTransaction $transaction = null) {
-        parent::__construct();
-        
+        parent::__construct(); 
+
         $this->product = $product ? $product : $this->subscription_product();
         $this->subscription = $subscription ?? null;
         $this->transaction = $transaction ? $transaction : $this->subscription_latest_txn();
@@ -177,10 +177,18 @@ class TWW_MembershipShortcode extends TWW_Shortcodes {
     }
 
     public function print_resume_button($expired) {
-
         $id = $expired ? 'tww-resume-membership-with-transaction' : 'tww-resume-membership';
+        
+        if('tww-resume-membership-with-transaction' === $id) {
+            return sprintf(
+            '<a id="'.$id.'" href="#" class="tww-positive-action">
+                <span class="loader--inner-element"></span>
+                Resume Membership
+            </a>');
+        }
+
         return sprintf(
-        '<a id="'.$id.'" href="#" class="loader-default--primary loader-default">
+        '<a id="'.$id.'" href="#" class="tww-positive-action">
             <span class="loader--inner-element"></span>
             Resume Membership
         </a>');

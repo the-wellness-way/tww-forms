@@ -28,7 +28,7 @@
  }
 
  if(!defined('TWW_FORMS_ASSETS_VERSION')) {
-     define('TWW_FORMS_ASSETS_VERSION', '1.0.99');
+     define('TWW_FORMS_ASSETS_VERSION', '1.1.01');
  }
 
 require_once 'vendor/autoload.php';
@@ -118,6 +118,7 @@ use TWWForms\Routes\TWW_TransactionsRoute;
 use TWWForms\Routes\TWW_CancelRoute;
 use TWWForms\Routes\TWW_LoginRoute;
 use TWWForms\Routes\TWW_ChangePasswordRoute;
+use TWWForms\Routes\TWW_StatsRoute;
 
 $twwSubscriptionRoutes = new TWW_SubscriptionRoute();
 add_action('rest_api_init', [$twwSubscriptionRoutes, 'boot']);
@@ -133,6 +134,9 @@ add_action('rest_api_init', [$twwLoginRoute, 'boot']);
 
 $twwChangePasswordRoute = new TWW_ChangePasswordRoute();
 add_action('rest_api_init', [$twwChangePasswordRoute, 'boot']);
+
+$twwStatsRoute = new TWW_StatsRoute();
+add_action('rest_api_init', [$twwStatsRoute, 'boot']);
 
 //use TWWForms\Includes\TWW_Email;
 

@@ -44,8 +44,8 @@ class TWW_TransactionsRoute extends TWW_Routes {
     
         $api_key = get_option('mpdt_api_key', '');
     
-        $mp_endpoint_ta = '/wp-json/mp/v1/transactions';
-        $url = 'http://192.168.192.4:80' . $mp_endpoint_ta;
+        $mp_endpoint_ta = 'wp-json/mp/v1/transactions';
+        $url = trailingslashit($this->get_site_url()) . $mp_endpoint_ta;
     
         $data = [
             'subscription' => $subscription_id,
@@ -71,17 +71,20 @@ class TWW_TransactionsRoute extends TWW_Routes {
     
         $decoded_response = json_decode($response_body, true);
     
-        if (is_wp_error($response) || empty($decoded_response)) {
+        if (is_wp_error($response)) {
             return new \WP_Error(
                 'api_error',
-                'Failed to create transaction.',
+                $response->get_error_message(),
                 ['status' => 500]
             );
         }
-    
+
+        $txn_id = $decoded_response['id'];
+
         return rest_ensure_response([
             'success' => true,
             'message' => 'A transaction has been created.',
+            'transaction_id' => $txn_id,
             'mp' => $decoded_response
         ]);
     }

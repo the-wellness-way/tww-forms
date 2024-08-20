@@ -14,10 +14,6 @@ abstract class TWW_Routes {
 
     public function set_api_key() {
         $this->api_key = get_option('mpdt_api_key', '');
-
-        if(!$this->api_key) {
-            error_log('API key is missing');
-        }
     }
 
     public function register_routes( ) {

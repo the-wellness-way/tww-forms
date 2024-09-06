@@ -356,7 +356,7 @@ class TWW_MembershipShortcode extends TWW_Shortcodes {
     }
 
     public function get_update_card_url() {
-        return $this->subscription->id ? site_url('/account/?action=update&sub=' . $this->subscription->id) : null;
+        return $this->subscription->id ? site_url('/tww-membership/?action=update&sub=' . $this->subscription->id) : null;
     }
 
     public function print_tag() {

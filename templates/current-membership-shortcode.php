@@ -5,8 +5,6 @@ if (!defined('ABSPATH')) {
     error_log('sub: ' . print_r($sub, true));
 }
 
-
-
 // Check if the current URL is '/account'
 if (strpos($_SERVER['REQUEST_URI'], '/tww-membership') !== false) {
 

@@ -85,6 +85,24 @@ function tww_register_scripts() {
     $now = new DateTime();
     $is_expired = $date < $now;
 
+    if (strpos($_SERVER['REQUEST_URI'], '/tww-membership') !== false) {
+        // Ensure MeprAccountCtrl exists
+        if (class_exists('MeprAccountCtrl') && isset($_GET['action']) && $_GET['action'] === 'update' && isset($_GET['sub'])) {
+            $sub = new MeprSubscription((int)$_GET['sub']);
+            
+            // Check if the subscription's payment method is Stripe
+            if ($sub->payment_method()) {
+                $pm = $sub->payment_method();
+
+                // Enqueue scripts only if the Stripe gateway method exists
+                if (method_exists($pm, 'enqueue_user_account_scripts')) {
+                    wp_enqueue_script('jquery');
+                    $pm->enqueue_user_account_scripts();
+                }
+            }
+        }
+    }
+
     wp_register_script('tww-forms', TWW_FORMS_PLUGIN_URL . 'resources/assets/js/tww-forms.js', [], $version, true);
     wp_enqueue_script('tww-forms');
     wp_localize_script('tww-forms', 'twwForms', [

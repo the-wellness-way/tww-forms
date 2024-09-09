@@ -109,12 +109,21 @@ button.btn-tww-registration div#tww-plus-button-loader svg {
     align-items: center;
 }
 
+.tww-positive-action {
+    color: var(--tww-green);
+    background-color: transparent;
+    font-size: 13px;
+    display: flex;
+    align-items: center;
+}
+
 .tww-negative-action span img.loadinggif,
-.tww-negative-action img.loadinggif {
+.tww-negative-action img.loadinggif,
+img.loadinggif {
     margin-right: 10px;
     margin-left: 10px;
-    width: 20px;
-    height: 20px;
+    width: 20px !important;
+    height: 20px !important;
 }
 
 body input#tww-plus-email::placeholder {

@@ -1,7 +1,7 @@
-const getEl = (el) =>  document.getElementById(el);
-const getAll = (className) => document.querySelectorAll('.'  + className);
+export const getEl = (el) =>  document.getElementById(el);
+export const getAll = (className) => document.querySelectorAll('.'  + className);
 
-const errorDiv = (message) => {
+export const errorDiv = (message) => {
     message = message ?? 'An error occurred. Please try again later.';
 
     const div = document.createElement('div');
@@ -17,7 +17,7 @@ const errorDiv = (message) => {
     return div;
 }
 
-const successDiv = (message) => {
+export const successDiv = (message) => {
     message = message ?? 'Success!';
 
     const div = document.createElement('div');
@@ -33,7 +33,7 @@ const successDiv = (message) => {
     return div;
 }
 
-const clearErrors = (selectorAll = null, remove = false) => {  
+export const clearErrors = (selectorAll = null, remove = false) => {  
     selectorAll = selectorAll ?? '.tww-form-error';
 
     if (document.querySelectorAll(selectorAll)) {
@@ -49,7 +49,7 @@ const clearErrors = (selectorAll = null, remove = false) => {
     }
 }
 
-const clearSuccess = (selectorAll = null) => {    
+export const clearSuccess = (selectorAll = null) => {    
     selectorAll = selectorAll ?? '.tww-plus-success';
     if(document.querySelectorAll(selectorAll)) {
         document.querySelectorAll(selectorAll).forEach(function(element) {
@@ -58,12 +58,12 @@ const clearSuccess = (selectorAll = null) => {
     }
 }
 
-const validateEmail = (email) => {
+export const validateEmail = (email) => {
     const re = /\S+@\S+\.\S+/;
     return re.test(email);
 }
 
-const initPasswordEye = () => {
+export const initPasswordEye = () => {
     const passwordFields = document.querySelectorAll('.tww-password-wrapper input[type="password"]');
 
     passwordFields.forEach((field) => {

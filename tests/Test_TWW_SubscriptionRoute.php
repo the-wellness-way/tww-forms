@@ -26,7 +26,7 @@ class Test_TWW_SubscriptionRoute extends WP_UnitTestCase {
                 'body' => json_encode([
                     'status' => 'success',
                     'message' => 'Member created successfully',
-                    'redirect' => $params['redirect_url'] ?? '',
+                    'redirect' => '',
                     'data' => []
                 ]),
             ];
@@ -59,17 +59,4 @@ class Test_TWW_SubscriptionRoute extends WP_UnitTestCase {
         $this->assertInstanceOf(WP_REST_Response::class, $response);
         $this->assertEquals('success', $response->data['status']);
     } 
-
-    /**
-     * @covers TWW_SubscriptionRoute::create_member
-     * @group twwCreateMember
-     */
-    public function test_create_member() {
-        add_filter('pre_http_request', function($preempt, $request, $url) {
-            return $this->success;
-        }, 10, 3);
-
-        $subRoute = new TWW_SubscriptionRoute();
-        $request = new \WP_REST_Request('POST', '/tww/v1/create-member');
-    }
 }

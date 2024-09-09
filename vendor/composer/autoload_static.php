@@ -20,6 +20,7 @@ class ComposerStaticInit0e23f6fe4c12206b1b4797b48bfd4965
         'T' => 
         array (
             'TWWForms\\' => 9,
+            'TWWFormsTests\\' => 14,
         ),
         'S' => 
         array (
@@ -48,6 +49,10 @@ class ComposerStaticInit0e23f6fe4c12206b1b4797b48bfd4965
         'TWWForms\\' => 
         array (
             0 => __DIR__ . '/../..' . '/src',
+        ),
+        'TWWFormsTests\\' => 
+        array (
+            0 => __DIR__ . '/../..' . '/tests',
         ),
         'Symfony\\Polyfill\\Php80\\' => 
         array (

@@ -98,13 +98,6 @@ abstract class TWW_Shortcodes {
         return is_user_logged_in();
     }
 
-    /**
-     * Javascript Resources
-     * 
-     * 
-     * 
-     */
-
     public function get_js_resource(string $handle = null) {
         if(null === $handle) {
             throw new \Exception('Missing resource handle.');

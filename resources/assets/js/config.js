@@ -1,4 +1,4 @@
-const config = {
+export const config = {
     twwLoginButton: 'tww-login-button',
     twwRegistrationFree: 'tww-registration-free',
     twwPlusEmail: 'tww-plus-email',
@@ -14,6 +14,8 @@ const config = {
     twwModalChangePlanButton: 'tww-modal-change-plan-button',
     twwChangePlanSelection: 'tww-change-plan-selection',
     twwChangePlanSelectionButton: 'tww-change-plan-selection-button',
+    twwResumeMembershipButton: 'tww-resume-membership',
+    twwResumeMembershipWithTransaction: 'tww-resume-membership-with-transaction',
     twwApiResponse: 'tww-api-response',
     twwEditUserName: 'tww-edit-user-name',
     twwEditUserNameForm: 'tww-edit-user-name-form',
@@ -28,10 +30,13 @@ const config = {
         twwPlusSuccess: 'tww-plus-success',
         twwPlusError: 'tww-plus-error',
         twwchangePlanModalClose: 'tww-change-plan-modal-close',
+        twwLoginModal: 'tww-modal-link',
+        grams2Ounces: 'grams2ounces__form'
     },
     loaders: {
         default: 'loader-rings-white',
         defaultGif: 'loading',
+        loadinggif: 'loadinggif'
     },
     twwLoginForm: 'tww-login-form',
     twwChangePasswordForm: 'tww-change-password-form',

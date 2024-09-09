@@ -17,6 +17,12 @@ class TWW_SubscriptionRoute extends TWW_Routes {
             'callback' => 'update_user',
             'path' => '/update-user',
             'permission_callback' => '__return_true'
+        ],
+        'update-subscription' => [
+            'methods' => 'POST',
+            'callback' => 'update_subscription',
+            'path' => '/update-subscription',
+            'permission_callback' => '__return_true'
         ]
     ];
 
@@ -95,6 +101,7 @@ class TWW_SubscriptionRoute extends TWW_Routes {
         if($response_body && array_key_exists('id', $response_body) && !current_user_can('manage_options')) {
             $user = new \MeprUser($response_body['id']);
             $wp_user = get_user_by('email', $params['email']);
+            
             if($user->ID) {
                 wp_set_current_user($user->ID);
                 wp_set_auth_cookie($user->ID);
@@ -162,5 +169,65 @@ class TWW_SubscriptionRoute extends TWW_Routes {
         ];
 
         return new \WP_REST_Response($data);
+    }
+
+    public function update_subscription(\WP_REST_Request $request) {
+        $params = $request->get_params();
+        $user_email = $params['user_email'] ?? null;
+        $user_id = $params['user_id'] ?? null;
+        $subscription_id = $params['subscription_id'] ?? null;
+        $membership_id = $params['membership_id'] ?? null;
+        $status = $params['status'] ?? null;
+    
+        $api_key = get_option('mpdt_api_key', '');
+
+        if(!$params['user_id'] && $user_email)  {
+            $user = get_user_by('email', $user_email);
+            $user_id = $user->ID;
+        }
+    
+        if (!$user_id || !$subscription_id || !$membership_id || !$status) {
+            return rest_ensure_response(['error' => 'Missing required parameters'], 400);
+        }
+    
+        $subscription = new \MeprSubscription($subscription_id);
+        $created_at = $subscription->created_at;
+        $subscr_id = $subscription->subscr_id;
+    
+        $mp_endpoint = 'wp-json/mp/v1/subscriptions/' . $subscription_id;
+        $url = trailingslashit($this->get_site_url()) . $mp_endpoint;
+    
+        $data = [
+            'subscr_id' => $subscr_id,
+            'member' => $user_id,
+            'membership' => $membership_id,
+            'status' => $status,
+            'created_at' => $created_at
+        ];
+    
+        $request_args = [
+            'body' => wp_json_encode($data),
+            'headers' => [
+                'Content-Type' => 'application/json',
+                'MEMBERPRESS-API-KEY' => $api_key,
+            ]
+        ];
+    
+        $response = wp_remote_post($url, $request_args);
+    
+        if (is_wp_error($response)) {
+            return rest_ensure_response(['error' => 'Request failed', 'details' => $response->get_error_message()], 500);
+        }
+    
+        $response_body = wp_remote_retrieve_body($response);
+        $decoded_response = json_decode($response_body, true);
+
+        $response = [
+            'success' => true,
+            'message' => 'Your membership has been updated. Please wait while the page reloads.',
+            'mp' => $decoded_response
+        ];
+    
+        return rest_ensure_response($response);
     }
 }

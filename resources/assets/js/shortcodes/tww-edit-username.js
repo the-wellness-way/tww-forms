@@ -1,9 +1,13 @@
-const initEditUserName = () => {
+import { getEl, clearErrors, errorDiv, successDiv } from "../helpers.js";
+import { config } from "../config.js";
+import { state } from "../state.js";
+import { twwLoaderSVG, loaderDefault } from "../loader.js";
+
+export const initEditUserName = () => {
     const editUserNameForm = getEl(config.twwEditUserNameForm);
     const submitButton = getEl(config.twwEditUserButton);
     const emailInput = getEl(config.twwUserForm.email);
     
-
     if(emailInput) {
         //validate email when user leaves the email input field
         emailInput.addEventListener('blur', (e) => {
@@ -62,7 +66,7 @@ const initEditUserName = () => {
     }
 }
 
-const updateUser = async (data) => {
+export const updateUser = async (data) => {
     const response = await fetch(state.endpoints.updateUser, {
         method: 'POST',
         body: JSON.stringify(data),
@@ -75,11 +79,7 @@ const updateUser = async (data) => {
     return await response.json();
 }
 
-const validateEmailNow = (email) => {
+export const validateEmailNow = (email) => {
     const re = /\S+@\S+\.\S+/;
     return re.test(email);
 }
-
-(function() {
-    initEditUserName();
-})();

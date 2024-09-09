@@ -16,8 +16,6 @@ class TWW_PasswordCtrl {
     }
 
     public function add_pwd_reset_entry($user, $new_pass) {
-        var_dump($user); // This will show you the user object
-        die();
         $user_id = $user->ID;
         $meta_key = self::PREFIX . self::META_KEY;
         $meta_value = get_user_meta($user_id, $meta_key, true);

@@ -1,5 +1,5 @@
 :root {
-    --brand-green: rgb(128, 183, 65);
+    --brand-green: #80b741;
     --brand-grey: rgb(136, 136, 136);
     --border-grey: rgb(204, 204, 204);
     --border-grey-light: rgb(238, 238, 238);
@@ -11,6 +11,7 @@
     --tww-light-grey: #ddddde;
     --tww-beige: #dcd4cb;
 
+    --white: white;
     --tww-white: white;
 
     --black: rgb(0, 0, 0);
@@ -22,14 +23,38 @@
     --pending: rgb(255, 255, 0);
 }
 
-.tww-change-plan-modal,
-.tww-plus-modal {
-    display: none;
-}
+
 
 .tww-change-plan-modal,
 .tww-plus-modal {
-    background-color: transparent;
+    display: none;
+    text-align: left;
+}
+
+.tww-plus-login__fields-wrapper input,
+.tww-plus-login__fields-wrapper input[type=email] {
+    background-color: rgba(0,0,0,.04);
+  border-radius: 4px;
+    height: 50px;
+    width: 100%;
+    padding: 10px;
+  width: 100%;
+  font-size: 14px;
+  font-family: inherit;
+  line-height: 24px;
+  color: #555;
+  background-color: #f1f1f1;
+  border: none;
+  transition: all .2s ease;
+}
+
+input.invalid {
+    border: 1px solid #b32d2e !important;
+  }
+
+.tww-change-plan-modal,
+.tww-plus-modal {
+    background-color: white;
     padding: 20px;
     display: flex;
     align-items: center;
@@ -50,6 +75,8 @@
     height: 100%;
     display: flex;
     z-index: 9999;
+    background-color: rgba(242, 243, 243, 0.9);
+    background-color: rgba(0,0,0, .6);
 }
 
 .tww-change-plan-modal--inner,
@@ -123,4 +150,8 @@
 
 input.invalid {
     border: 1px solid #b32d2e !important;
+}
+
+.tww-modal-link {
+    cursor: pointer;
 }

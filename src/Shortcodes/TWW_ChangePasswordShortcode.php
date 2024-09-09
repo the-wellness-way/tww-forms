@@ -10,7 +10,7 @@ class TWW_ChangePasswordShortcode extends TWW_Shortcodes {
     }
 
     public function render_shortcode($atts, $content = null) {
-        wp_enqueue_script($this->sc_settings['handle']);
+        //wp_enqueue_script($this->sc_settings['handle']);
 
         //if current user isn't logged in return a prompt to log in
 

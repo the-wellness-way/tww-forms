@@ -136,7 +136,7 @@ use TWWForms\Routes\TWW_TransactionsRoute;
 use TWWForms\Routes\TWW_CancelRoute;
 use TWWForms\Routes\TWW_LoginRoute;
 use TWWForms\Routes\TWW_ChangePasswordRoute;
-use TWWForms\Routes\TWW_StatsRoute;
+// use TWWForms\Routes\TWW_StatsRoute;
 
 $twwSubscriptionRoutes = new TWW_SubscriptionRoute();
 add_action('rest_api_init', [$twwSubscriptionRoutes, 'boot']);
@@ -153,8 +153,8 @@ add_action('rest_api_init', [$twwLoginRoute, 'boot']);
 $twwChangePasswordRoute = new TWW_ChangePasswordRoute();
 add_action('rest_api_init', [$twwChangePasswordRoute, 'boot']);
 
-$twwStatsRoute = new TWW_StatsRoute();
-add_action('rest_api_init', [$twwStatsRoute, 'boot']);
+// $twwStatsRoute = new TWW_StatsRoute();
+// add_action('rest_api_init', [$twwStatsRoute, 'boot']);
 
 //use TWWForms\Includes\TWW_Email;
 

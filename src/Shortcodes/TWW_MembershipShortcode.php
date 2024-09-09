@@ -177,6 +177,9 @@ class TWW_MembershipShortcode extends TWW_Shortcodes {
     }
 
     public function print_resume_button($expired) {
+        //very quick fix for now.... ugggh need to not do this but have to right now;
+        return '';
+
         $id = $expired ? 'tww-resume-membership-with-transaction' : 'tww-resume-membership';
         
         if('tww-resume-membership-with-transaction' === $id) {
@@ -209,13 +212,14 @@ class TWW_MembershipShortcode extends TWW_Shortcodes {
     }
 
     public function print_card_plan_buttons() {
+        $scenario = $this->get_scenario();
         $pm = $this->subscription_pm();
         $prd = $this->product;
         $url = $this->get_update_card_url();
 
         $html = '';
 
-        if($pm) {
+        if($pm && ('active' === $scenario || 'lapsed' === $scenario)) {
             $html .= sprintf('
             <a id="tww-update-card" href="%s" class="card-plan loader-default--primary loader-default">
                 <span class="loader--inner-element"></span>

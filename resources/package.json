@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "test:unit": "node --experimental-vm-modules node_modules/.bin/jest",
-    "build": "webpack --config build/webpack.prod.js",
+    "build": "webpack --config build/webpack.prod.js --stats verbose",
     "watch": "webpack serve --config build/webpack.dev.js"
   },
   "repository": {

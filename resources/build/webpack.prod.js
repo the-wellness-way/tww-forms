@@ -18,6 +18,10 @@ export default {
     path: path.resolve(__dirname, '../dist'),
     publicPath: '/wp-content/plugins/tww-forms/resources/dist/',
   },
+  stats: {
+    warnings: false,  // Suppress warnings
+    errors: false,    // Suppress errors (be cautious)
+  },
   module: {
     rules: [
       {

@@ -159,12 +159,14 @@ a.loader-default:disabled,
 button.loader-default:disabled {
     cursor: not-allowed !important;
     background-color: var(--brand-grey) !important;
+    border: none !important;
 }
 
 /* if loader-default is disabled make sure the background is grey even on hover */
 a.loader-default:disabled:hover,
 button.loader-default:disabled:hover {
     background-color: var(--brand-grey) !important;
+    border: none !important;
 }
 
 a.tww-negative-action {

@@ -18,12 +18,20 @@ class TWW_LoginRoute extends TWW_Routes {
 
     public function login(\WP_REST_Request $request) {
       $params = $request->get_params();
+      $use_auth_0 = true === $params['use_auth_0'] || 'true' === $params['use_auth_0'] ? true : false;
 
       if(!isset($params['email']) || !isset($params['password'])) {
         return new \WP_Error('missing_params', 'Missing email or password', ['status' => 400]);
       }
 
-      //do the wordpress login
+      if(true === $use_auth_0 && class_exists('TwwFormsAuth0\Includes\TwwfAuth0Login')) {
+        $auth0_login = new \TwwFormsAuth0\Includes\TwwfAuth0Login();
+        $auth0_response = $auth0_login->twwf_auth0_login($params['email'], $params['password']);
+
+        return $auth0_response;
+      }    
+
+
         $user = wp_signon([
             'user_login' => $params['email'],
             'user_password' => $params['password'],

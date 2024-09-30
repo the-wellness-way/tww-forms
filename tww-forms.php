@@ -28,7 +28,7 @@
  }
 
  if(!defined('TWW_FORMS_ASSETS_VERSION')) {
-     define('TWW_FORMS_ASSETS_VERSION', '1.1.01');
+     define('TWW_FORMS_ASSETS_VERSION', '1.1.02');
  }
 
 require_once 'vendor/autoload.php';
@@ -116,6 +116,8 @@ function tww_register_scripts() {
         'membership_id' => TWW_SubscriptionsCtrl::get_membership_id_from_last_subscription(),
         'forgot_password_url' => site_url() . '/login/?action=forgot_password',
         'current_user_id' => get_current_user_id(),
+        'current_user_email' => wp_get_current_user()->user_email,
+        'current_user_login' => wp_get_current_user()->user_login,
     ]);
 
     // wp_register_script('tww-helpers', TWW_FORMS_PLUGIN_URL . 'resources/assets/js/helpers.js', [], $version, true);
@@ -197,7 +199,7 @@ function enqueue_webpack_dev_server_script() {
         wp_enqueue_script('webpack-dev-server');
 }
 
-add_action('wp_enqueue_scripts', 'enqueue_webpack_dev_server_script');
+add_action('wp_enqueue_scripts', 'enqueue_webpack_dev_server_script', 11);
   
 
 

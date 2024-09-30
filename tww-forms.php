@@ -198,6 +198,38 @@ function enqueue_webpack_dev_server_script() {
 }
 
 add_action('wp_enqueue_scripts', 'enqueue_webpack_dev_server_script');
-  
 
+use \TWWForms\Integrations\TWW_ElementorIntegration;
+use \TWWForms\Includes\TWW_MeprRenew;
 
+if(class_exists('\Elementor\Plugin')) {
+    // Register the dynamic tag with Elementor
+        add_action( 'elementor/dynamic_tags/register_tags', function( $dynamic_tags ) {
+            $dynamic_tags->register( new TWW_ElementorIntegration() );
+        });
+
+    $twwMeprRenew = new TWW_MeprRenew();
+    add_action( 'plugins_loaded', [$twwMeprRenew, 'boot']);
+    
+}
+
+function setup_dequeue_mepr_products_js() {
+    // Hooking the dequeue/enqueue to the correct admin_enqueue_scripts action
+    add_action('admin_enqueue_scripts', 'dequeue_mepr_products_js', 999);
+}
+add_action( 'init', 'setup_dequeue_mepr_products_js');
+
+function dequeue_mepr_products_js() {
+    wp_dequeue_script('mepr-products-js');
+    wp_deregister_script('mepr-products-js');
+
+    // Register and enqueue your custom script
+    wp_register_script('tww-mepre-product-js', TWW_FORMS_PLUGIN_URL . 'resources/assets/js/tww_admin_product.js', array('jquery-ui-spinner','mepr-date-picker-js','jquery-ui-sortable','mepr-settings-table-js','mepr-admin-shared-js'), TWW_FORMS_ASSETS_VERSION);
+    wp_enqueue_script('tww-mepre-product-js');
+}
+
+add_filter('mepr_view_paths', function($paths) {
+    array_unshift($paths, TWW_FORMS_PLUGIN . 'templates/memberpress/');
+
+    return $paths;
+});

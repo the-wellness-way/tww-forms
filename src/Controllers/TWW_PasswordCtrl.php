@@ -4,6 +4,7 @@ namespace TWWForms\Controllers;
  * This class will:
  * - Add an option in wp_user_meta table to log the number of times a user has reset their password with date and time 
  */
+
 class TWW_PasswordCtrl {
     const PREFIX = 'tww__';
     const META_KEY = 'pwd_resets';

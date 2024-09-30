@@ -1,4 +1,4 @@
-import { getEl, clearErrors } from "./helpers.js";
+import { getEl, clearErrors, validateEmail } from "./helpers.js";
 import { config } from "./config.js";
 import { state } from "./state.js";
 

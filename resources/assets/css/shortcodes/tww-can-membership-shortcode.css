@@ -1,0 +1,47 @@
+.can-current-membership-wrapper {
+    --brand-primary: #B77051;
+    --brand-black: #121212;
+    --brand-light: #F7F1EE;
+
+
+    --white: #fff;
+
+    max-width: 511px;
+}
+
+
+.can-current-membership-inner {
+    background-color: var(--brand-primary) !important;
+    padding: 20px;
+}
+
+.can-current-membership-header {
+    color: var(--white);
+    font-size: 24px;
+    font-weight: 700;
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.can-current-membership-header .recurring {
+    color: var(--white);
+    font-size: 24px;
+    background-color: var(--black);
+    font-size: 16px;
+    font-weight: 800;
+    line-height: 22px;
+    padding: 12px 24px;
+    border-radius: 35px;
+    text-decoration: none;
+}
+
+.ccm-active {background-color: var(--white);}
+
+.can-current-membership h2 {
+    color: var(--white);
+    font-size: 24px;
+    font-weight: 700;
+    margin: 0;
+}

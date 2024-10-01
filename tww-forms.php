@@ -1,9 +1,9 @@
 <?php
 /**
- * Plugin Name: TWW Forms
- * Description: Custom forms for TWW Plus registration
+ * Plugin Name: TWW MeprForms
+ * Description: Customized shortcodes, components, & forms for Memberpress.
  * Version: 1.0.0
- * Author: The Wellness Way
+ * Author: TWW
  * Author URI: https://www.thewellnessway.com
  * License: GPL2
  * License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -160,6 +160,7 @@ add_action('rest_api_init', [$twwChangePasswordRoute, 'boot']);
 
 use TWWForms\Shortcodes\TWW_FreeShortcode;
 use TWWForms\Shortcodes\TWW_MembershipShortcode;
+use TWWForms\Shortcodes\TWW_CanMembershipShortcode;
 use TWWForms\Shortcodes\TWW_EditUsernameShortcode;
 use TWWForms\Shortcodes\TWW_EmailShortcode;
 use TWWForms\Shortcodes\TWW_ChangePasswordShortcode;
@@ -178,6 +179,7 @@ add_action('init', function() {
 
     $twwFreeShortcode = new TWW_FreeShortcode();
     $twwMembershipShortcode = new TWW_MembershipShortcode($product, $subcription, $transaction);
+    $twwCanMembershipShortcode = new TWW_CanMembershipShortcode($product, $subcription, $transaction);
     $twwEditUsernameShortcode = new TWW_EditUsernameShortcode();
     $twwEmailShortcode = new TWW_EmailShortcode();
     $twwChangePasswordShortcode = new TWW_ChangePasswordShortcode();

@@ -3,12 +3,10 @@
     --brand-black: #121212;
     --brand-light: #F7F1EE;
 
-
     --white: #fff;
 
     max-width: 511px;
 }
-
 
 .can-current-membership-inner {
     background-color: var(--brand-primary) !important;
@@ -25,6 +23,10 @@
     align-items: center;
 }
 
+.can-current-membership-header h2 {
+    margin: 0;
+}
+
 .can-current-membership-header .recurring {
     color: var(--white);
     font-size: 24px;
@@ -37,11 +39,99 @@
     text-decoration: none;
 }
 
-.ccm-active {background-color: var(--white);}
+.ccm-active {
+    background-color: var(--white);
+}
+
+.ccm-active h2 {
+    color: var(--brand-primary);
+}
+
+.can-current-membership.active {
+    background-color: var(--white);
+    color: var(--brand-primary);
+}
 
 .can-current-membership h2 {
     color: var(--white);
     font-size: 24px;
     font-weight: 700;
     margin: 0;
+}
+
+.can-current-membership {
+    border-radius: 10px;
+    border: 1px solid var(--white);
+    margin-bottom: 20px;
+}
+
+.can-current-membership--inner {
+    display: flex;
+    padding: 20px;
+}
+
+.can-current-membership--radio {
+    display: flex;
+    align-items: center;
+    margin-right: 10px;
+}
+
+.can-current-membership--circle-wrapper {
+    padding: 5px;
+    border: 1px solid var(--white);
+    border-radius: 50%;
+}
+
+.can-current-membership--circle {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: var(--brand-primary);
+    position: relative;
+    display: block;
+}
+
+.can-current-membership.ccm-active .can-current-membership--circle {
+    background: var(--brand-primary);
+}
+
+.can-current-membership.ccm-active .can-current-membership--circle-wrapper {
+    border-color: var(--brand-primary);
+}
+
+.can-current-membership--content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.can-current-membership--header h2 {
+    font-size: 20px;
+    line-height: 22px;
+    margin: 5px 0;
+}
+
+.can-current-membership--header span {
+    color: var(--white);
+    font-size: 15px;
+    line-height: normal;
+}
+
+.can-current-membership-membership-string p {
+    color: var(--white);
+    font-size: 15px;
+    line-height: normal;
+}
+
+.can-current-membership.ccm-active .can-current-membership--header span:not(.status-tag),
+.can-current-membership.ccm-active .can-current-membership--header h2 {
+    color: var(--black);
+}
+
+
+.can-current-membership--header .status-tag.active {
+    background-color: var(--black);
+    color: var(--white);
+    margin: 0;
+    border-radius: 35px;
 }

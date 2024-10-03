@@ -11,13 +11,12 @@
     --tww-light-grey: #ddddde;
     --tww-beige: #dcd4cb;
 
-    --tww-white: white;
+    --white: white;
 
     --black: rgb(0, 0, 0);
+    --active: rgb(0, 0, 0);
     --red: rgb(153, 27, 27);
 
-    --active: rgb(220, 252, 231);
-    --active-alt: rgb(22, 101, 52);
     --canceled: var(--red);
     --pending: rgb(255, 255, 0);
 }
@@ -146,3 +145,4 @@ body input#tww-plus-email::placeholder {
     padding: 0 20px;
     color: var(--tww-dark-grey) !important;
 }
+

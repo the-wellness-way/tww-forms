@@ -13,35 +13,36 @@ echo '<div class="can-current-membership-inner">';
         <a class="button recurring" href="/tww-membership?action=update&sub=<?php echo $subscription->id; ?>">YEARLY</a>
     </div>
 
-    <p><?php echo $this->print_membership_string(); ?></p>
+    <div class="can-current-membership-membership-string">
+        <?php echo $this->print_membership_string(); ?>
+    </div>
+
 <?php
 if ($prods->have_posts()) {
     foreach($prods->posts as $canprod) {
         $active_product_id = null;
+
         if($canprod->ID == $subscription->product_id) {
             $active_product_id = $canprod->ID;
         }
-
         ?>
-                
-                    
                 <div class="can-current-membership <?php echo $active_product_id ? 'ccm-active' : ''; ?>">
                     <div class="can-current-membership--inner">
-                        <?php echo $active_product_id ? '<span class="tag">current plan</span>' : ''; ?>
+
                         <div class="can-current-membership--radio">
-                            <div class="can-current-membership--circle"></div>
+                            <div class="can-current-membership--circle-wrapper">
+                                <div class="can-current-membership--circle"></div>
+                            </div>
                         </div>
                         
                         <div class="can-current-membership--content">
                             <div class="can-current-membership--header">
                                 <span><?php echo $canprod->post_title; ?> Membership</span>
                                 <h2><?php echo $canprod->post_title; ?></h2>
-                                <span class="status-tag <?php echo $subscription->status; ?>"><?php echo $subscription->status; ?></span>
-                            </div>
-                            <div class="membership">
-                                <div class="can-current-membership--actions">
-                                    <a href="" class="tww-primary-button">View Plan</a>
-                                </div>
+                                <?php
+                                if($active_product_id) : ?>
+                                    <span class="status-tag <?php echo $subscription->status; ?>"><?php echo $active_product_id ? 'Your Current Plan' : ''; ?></span>
+                                <?php endif; ?>
                             </div>
                         </div>
                     </div>

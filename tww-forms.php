@@ -72,8 +72,54 @@ function tww_register_styles() {
 use TWWForms\Controllers\TWW_SubscriptionsCtrl;
 add_action('wp_enqueue_scripts', 'tww_register_scripts');
 
+class TWW_Coupon {
+    public function __construct() {
+        add_action('init', [$this, 'register_membership_id_field']);
+        add_action('save_post', [$this, 'save_membership_id_meta_box']);
+    }
+
+    public function register_membership_id_field() {
+        add_action('add_meta_boxes', [$this, 'check_page_template_and_register_meta_box']);
+    }
+
+    public function check_page_template_and_register_meta_box() {
+        global $post;
+        
+        if (!$post) return;
+
+        $page_template = get_post_meta($post->ID, '_wp_page_template', true);
+
+        if ($page_template === 'template-register.php') {
+            register_post_meta('post', 'membership_id', [
+                'show_in_rest' => true,  
+                'single' => true,        
+                'type' => 'string',     
+                'sanitize_callback' => 'sanitize_text_field', 
+                'auth_callback' => '__return_true'
+            ]);
+
+            add_meta_box('membership_id_meta_box', 'Membership ID', [$this, 'display_membership_id_meta_box'], 'page', 'normal', 'high');
+        }
+    }
+
+    public function display_membership_id_meta_box($post) {
+        $membership_id = get_post_meta($post->ID, 'membership_id', true);
+        echo '<label for="membership_id_field">Membership ID:</label>';
+        echo '<input type="text" id="membership_id_field" name="membership_id_field" value="' . esc_attr($membership_id) . '" />';
+    }
+
+    public function save_membership_id_meta_box($post_id) {
+        if (array_key_exists('membership_id_field', $_POST)) {
+            update_post_meta($post_id, 'membership_id', sanitize_text_field($_POST['membership_id_field']));
+        }
+    }
+}
+
+$twwCoupon = new TWW_Coupon();
+
 function tww_register_scripts() {
     $version = TWW_FORMS_ASSETS_VERSION;
+    $mepr_options = \MeprOptions::fetch();
 
     if(!class_exists('MeprSubscription')) {
         return;
@@ -103,21 +149,42 @@ function tww_register_scripts() {
         }
     }
 
+    $post_id = get_the_ID();
+    $gateway_id = '';
+
+    $membership_id = get_post_meta($post_id, 'membership_id', true);
+    if($membership_id) {
+        $payment_methods = $mepr_options->payment_methods(false);
+
+        foreach($payment_methods as $pm) {
+            if($pm instanceof MeprStripeGateway) {
+                $gateway_id = $pm->id;
+            }
+        }
+    }
+
+
     wp_register_script('tww-forms', TWW_FORMS_PLUGIN_URL . 'resources/assets/js/tww-forms.js', [], $version, true);
     wp_enqueue_script('tww-forms');
     wp_localize_script('tww-forms', 'twwForms', [
         'siteUrl' => site_url(),
+        'coupon_nonce' => wp_create_nonce('mepr_coupons'),
         'iconsPath' => TWW_FORMS_PLUGIN_URL . 'resources/assets/images/icons/',
+        'ajaxUrl' => admin_url('admin-ajax.php'),
+        'post_id' => $post_id,
+        'mepr_product_id' => $membership_id,
         'restNonce' => wp_create_nonce('wp_rest'),
         'active_subscription_id' => $sub->id ?? null,
         'subscription_created_at' => $sub->created_at,
         'subscription_status' => $sub->status,
         'subscriptionExpired' => $is_expired,
-        'membership_id' => TWW_SubscriptionsCtrl::get_membership_id_from_last_subscription(),
+        //'membership_id' => TWW_SubscriptionsCtrl::get_membership_id_from_last_subscription(),
+        'membership_id' => $membership_id,
         'forgot_password_url' => site_url() . '/login/?action=forgot_password',
         'current_user_id' => get_current_user_id(),
         'current_user_email' => wp_get_current_user()->user_email,
         'current_user_login' => wp_get_current_user()->user_login,
+        'gw_string' => $gateway_id,
     ]);
 
     // wp_register_script('tww-helpers', TWW_FORMS_PLUGIN_URL . 'resources/assets/js/helpers.js', [], $version, true);
@@ -138,7 +205,7 @@ use TWWForms\Routes\TWW_TransactionsRoute;
 use TWWForms\Routes\TWW_CancelRoute;
 use TWWForms\Routes\TWW_LoginRoute;
 use TWWForms\Routes\TWW_ChangePasswordRoute;
-// use TWWForms\Routes\TWW_StatsRoute;
+use TWWForms\Routes\TWW_StatsRoute;
 
 $twwSubscriptionRoutes = new TWW_SubscriptionRoute();
 add_action('rest_api_init', [$twwSubscriptionRoutes, 'boot']);

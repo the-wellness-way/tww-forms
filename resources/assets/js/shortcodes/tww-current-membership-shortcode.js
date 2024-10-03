@@ -15,7 +15,7 @@ export const initCancelSubscription = () => {
             cancelSubscription().then((response) => {
                 e.target.innerHTML = 'Cancel Membership';
 
-                if(response.message && true == response.success){
+                if(response.message && true == response.success) {
                     messageContainer.appendChild(successDiv(response.message));
                 } else if (response.message && (false == response.success || response.code)) {
                     messageContainer.appendChild(errorDiv("There was an error cancelling your subscription. Please try again later."));

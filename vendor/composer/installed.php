@@ -3,7 +3,7 @@
         'name' => 'prudy/tww-forms',
         'pretty_version' => 'dev-main',
         'version' => 'dev-main',
-        'reference' => '9cb4818efb02ab06e63655c7a1c90d297c016fb8',
+        'reference' => 'df335e5117b8aa32c78927520af9380ac4ccc903',
         'type' => 'wordpress-plugin',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -27,6 +27,15 @@
             'install_path' => __DIR__ . '/../graham-campbell/result-type',
             'aliases' => array(),
             'dev_requirement' => true,
+        ),
+        'htmlburger/carbon-fields' => array(
+            'pretty_version' => 'v3.6.5',
+            'version' => '3.6.5.0',
+            'reference' => 'b18f8e2a2cc4cc976306eb867ad1d740a8e7c1d9',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../htmlburger/carbon-fields',
+            'aliases' => array(),
+            'dev_requirement' => false,
         ),
         'myclabs/deep-copy' => array(
             'pretty_version' => '1.12.0',
@@ -130,7 +139,7 @@
         'prudy/tww-forms' => array(
             'pretty_version' => 'dev-main',
             'version' => 'dev-main',
-            'reference' => '9cb4818efb02ab06e63655c7a1c90d297c016fb8',
+            'reference' => 'df335e5117b8aa32c78927520af9380ac4ccc903',
             'type' => 'wordpress-plugin',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),

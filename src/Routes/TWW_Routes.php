@@ -28,8 +28,9 @@ abstract class TWW_Routes {
 
     public function get_site_url() {
         if(strpos(site_url(), 'localhost') !== false) {
-            return 'http://host.docker.internal:8081';
+            return 'http://wordpress:80';
         }
+
         return site_url();
     }
 

@@ -28,7 +28,7 @@
  }
 
  if(!defined('TWW_FORMS_ASSETS_VERSION')) {
-     define('TWW_FORMS_ASSETS_VERSION', '1.1.01');
+     define('TWW_FORMS_ASSETS_VERSION', '1.1.03');
  }
 
 require_once 'vendor/autoload.php';
@@ -43,7 +43,6 @@ if (!is_plugin_active('memberpress/memberpress.php')) {
 
 class TWW_Forms {
     public function __construct() {
-        // Memberpress hook to allow list stylesheets and scripts by handle
         add_filter('mepr_design_style_handles', [$this, 'tww_design_style_handle_prefixes']);
     }
 
@@ -55,7 +54,6 @@ class TWW_Forms {
 }
 
 $twwForms = new TWW_Forms();
-
 add_action('wp_enqueue_scripts', 'tww_register_styles');
 function tww_register_styles() {
     $version = TWW_FORMS_ASSETS_VERSION;
@@ -70,10 +68,21 @@ function tww_register_styles() {
 }
 
 use TWWForms\Controllers\TWW_SubscriptionsCtrl;
-add_action('wp_enqueue_scripts', 'tww_register_scripts');
+use TWWForms\Includes\TWW_Templates;
 
+add_action('init', function() {
+    $twwTemplates = new TWW_Templates();
+    add_filter('theme_page_templates', [$twwTemplates, 'add_template']);
+    add_filter('template_include', [$twwTemplates, 'load_template']);
+});
+
+use TWWForms\Includes\TWW_RegisterTemplateMeta;
+$twwRegisterTemplateMeta = new TWW_RegisterTemplateMeta();
+
+add_action('wp_enqueue_scripts', 'tww_register_scripts');
 function tww_register_scripts() {
     $version = TWW_FORMS_ASSETS_VERSION;
+    $mepr_options = \MeprOptions::fetch();
 
     if(!class_exists('MeprSubscription')) {
         return;
@@ -86,15 +95,12 @@ function tww_register_scripts() {
     $is_expired = $date < $now;
 
     if (strpos($_SERVER['REQUEST_URI'], '/tww-membership') !== false) {
-        // Ensure MeprAccountCtrl exists
         if (class_exists('MeprAccountCtrl') && isset($_GET['action']) && $_GET['action'] === 'update' && isset($_GET['sub'])) {
             $sub = new MeprSubscription((int)$_GET['sub']);
             
-            // Check if the subscription's payment method is Stripe
             if ($sub->payment_method()) {
                 $pm = $sub->payment_method();
 
-                // Enqueue scripts only if the Stripe gateway method exists
                 if (method_exists($pm, 'enqueue_user_account_scripts')) {
                     wp_enqueue_script('jquery');
                     $pm->enqueue_user_account_scripts();
@@ -103,19 +109,40 @@ function tww_register_scripts() {
         }
     }
 
+    $post_id = get_the_ID();
+    $gateway_id = '';
+
+    $membership_id = get_post_meta($post_id, 'membership_id', true);
+    if($membership_id) {
+        $payment_methods = $mepr_options->payment_methods(false);
+
+        foreach($payment_methods as $pm) {
+            if($pm instanceof MeprStripeGateway) {
+                $gateway_id = $pm->id;
+            }
+        }
+    }
+
     wp_register_script('tww-forms', TWW_FORMS_PLUGIN_URL . 'resources/assets/js/tww-forms.js', [], $version, true);
     wp_enqueue_script('tww-forms');
     wp_localize_script('tww-forms', 'twwForms', [
         'siteUrl' => site_url(),
+        'coupon_nonce' => wp_create_nonce('mepr_coupons'),
         'iconsPath' => TWW_FORMS_PLUGIN_URL . 'resources/assets/images/icons/',
+        'ajaxUrl' => admin_url('admin-ajax.php'),
+        'post_id' => $post_id,
+        'mepr_product_id' => $membership_id,
         'restNonce' => wp_create_nonce('wp_rest'),
         'active_subscription_id' => $sub->id ?? null,
         'subscription_created_at' => $sub->created_at,
         'subscription_status' => $sub->status,
         'subscriptionExpired' => $is_expired,
-        'membership_id' => TWW_SubscriptionsCtrl::get_membership_id_from_last_subscription(),
+        'membership_id' => $membership_id,
         'forgot_password_url' => site_url() . '/login/?action=forgot_password',
         'current_user_id' => get_current_user_id(),
+        'current_user_email' => wp_get_current_user()->user_email,
+        'current_user_login' => wp_get_current_user()->user_login,
+        'gw_string' => $gateway_id,
     ]);
 
     // wp_register_script('tww-helpers', TWW_FORMS_PLUGIN_URL . 'resources/assets/js/helpers.js', [], $version, true);
@@ -136,7 +163,6 @@ use TWWForms\Routes\TWW_TransactionsRoute;
 use TWWForms\Routes\TWW_CancelRoute;
 use TWWForms\Routes\TWW_LoginRoute;
 use TWWForms\Routes\TWW_ChangePasswordRoute;
-// use TWWForms\Routes\TWW_StatsRoute;
 
 $twwSubscriptionRoutes = new TWW_SubscriptionRoute();
 add_action('rest_api_init', [$twwSubscriptionRoutes, 'boot']);
@@ -153,11 +179,6 @@ add_action('rest_api_init', [$twwLoginRoute, 'boot']);
 $twwChangePasswordRoute = new TWW_ChangePasswordRoute();
 add_action('rest_api_init', [$twwChangePasswordRoute, 'boot']);
 
-// $twwStatsRoute = new TWW_StatsRoute();
-// add_action('rest_api_init', [$twwStatsRoute, 'boot']);
-
-//use TWWForms\Includes\TWW_Email;
-
 use TWWForms\Shortcodes\TWW_FreeShortcode;
 use TWWForms\Shortcodes\TWW_MembershipShortcode;
 use TWWForms\Shortcodes\TWW_EditUsernameShortcode;
@@ -170,7 +191,6 @@ use TWWForms\Shortcodes\TWW_Grams2OuncesShortcode;
 use TWWForms\Controllers\TWW_PasswordCtrl;
 
 add_action('init', function() {
-    //$twwEmail = new TWW_Email();
     $subcripton_id  = TWW_SubscriptionsCtrl::get_last_subscription_id();
     $subcription    = new MeprSubscription($subcripton_id);
     $product        = new MeprProduct($subcription->product_id);
@@ -193,11 +213,23 @@ function enqueue_webpack_dev_server_script() {
         $file = false !== strpos($_SERVER['HTTP_HOST'],'localhost:8081') && 'prod' !== $mode ? 'main' : 'index';
         $version = false !== strpos($_SERVER['HTTP_HOST'],'localhost:8081') ? null : TWW_FORMS_ASSETS_VERSION;
         $url = trailingslashit(site_url()) . 'wp-content/plugins/tww-forms/resources/dist/'.$file.'.bundle.js';
-        wp_register_script('webpack-dev-server', $url, array(), $version, true);
+        wp_register_script('webpack-dev-server', $url, array(), TWW_FORMS_ASSETS_VERSION, true);
         wp_enqueue_script('webpack-dev-server');
 }
 
-add_action('wp_enqueue_scripts', 'enqueue_webpack_dev_server_script');
+add_action('wp_enqueue_scripts', 'enqueue_webpack_dev_server_script', 11);
+
+function twwe_add_path_to_mepr_rendering() {
+    add_filter('mepr_view_paths_get_string_/readylaunch/checkout/invoice', function($paths) {
+        $path_to_add = TWW_FORMS_PLUGIN . 'templates/memberpress';
+    
+        $paths[] = $path_to_add; 
+    
+        return $paths; 
+    }, 1);
+}
+
+add_action('init', 'twwe_add_path_to_mepr_rendering');
   
 
 

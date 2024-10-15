@@ -14,30 +14,55 @@ class TWW_LoginRoute extends TWW_Routes {
 
     public function boot() {
       $this->register_routes();
+
+      add_action( 'set_logged_in_cookie', [$this, 'update_cookie'] );
+    }
+
+    // We can put this in TWW_Routes
+    public function update_cookie($logged_in_cookie) {
+      $_COOKIE[LOGGED_IN_COOKIE] = $logged_in_cookie;
     }
 
     public function login(\WP_REST_Request $request) {
       $params = $request->get_params();
+      // $use_auth_0 = true === $params['use_auth_0'] || 'true' === $params['use_auth_0'] ? true : false;
 
       if(!isset($params['email']) || !isset($params['password'])) {
         return new \WP_Error('missing_params', 'Missing email or password', ['status' => 400]);
       }
 
-      //do the wordpress login
-        $user = wp_signon([
-            'user_login' => $params['email'],
-            'user_password' => $params['password'],
-            'remember' => true
-        ]);
+      // if(true === $use_auth_0 && class_exists('TwwFormsAuth0\Includes\TwwfAuth0Login')) {
+      //   $auth0_login = new \TwwFormsAuth0\Includes\TwwfAuth0Login();
+      //   $auth0_response = $auth0_login->twwf_auth0_login($params['email'], $params['password']);
 
-        if(is_wp_error($user)) {
-            return new \WP_Error('login_error', 'Invalid email or password', ['status' => 400]);
-        }
+      //   return $auth0_response;
+      // }    
 
-        return rest_ensure_response([
-            'success' => true,
-            'message' => 'Login successful',
-            'user' => $user
-        ]);
+
+      $user = wp_signon([
+          'user_login' => $params['email'],
+          'user_password' => $params['password'],
+          'remember' => true
+      ]);
+
+      if(is_wp_error($user)) {
+          return new \WP_Error('login_error', 'Invalid email or password', ['status' => 400]);
+      }
+
+      wp_clear_auth_cookie();        
+      wp_set_current_user($user->ID); 
+      wp_set_auth_cookie($user->ID);  
+
+      add_action( 'set_logged_in_cookie', [$this, 'update_cookie'] );
+
+      return rest_ensure_response([
+          'success' => true,
+          'message' => 'Login successful',
+          'user' => $user,
+          'user_id' => $user->ID,
+          'user_email' => $user->user_email,
+          'rest_nonce' => wp_create_nonce('wp_rest') , 
+          'coupon_nonce' => wp_create_nonce('mepr_coupons'),
+      ]);
     }
 }

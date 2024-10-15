@@ -2,6 +2,7 @@ import { config } from './config.js';
 
 export const state = {
     restNonce: window.twwForms.restNonce,
+    couponNonce: window.twwForms.coupon_nonce,
     restUrl: window.twwForms.siteUrl + '/wp-json/tww/v1',
     siteUrl: window.twwForms.siteUrl,
     assetsPath: window.twwForms.assetsPath,
@@ -10,9 +11,12 @@ export const state = {
     subscriptionCreatedAt: window.twwForms.subscription_created_at,
     subscriptionStatus: window.twwForms.subscription_status,
     membershipId: window.twwForms.membership_id,
+    isValidUser: window.twwForms.isValidUser,
     subscriptionExpired: window.twwForms.subscriptionExpired,
     currentUserId: window.twwForms.current_user_id,
+    currentUserEmail: window.twwForms.current_user_email,
     forgotPasswordUrl: window.twwForms.forgotPasswordUrl,
+    ajaxUrl: window.twwForms.ajaxUrl,
     endpoints: {
         createTransaction: config.restUrl + '/create-transaction',
         updateSubscription: config.restUrl + '/update-subscription',

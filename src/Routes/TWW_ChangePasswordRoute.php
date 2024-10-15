@@ -15,16 +15,23 @@ class TWW_ChangePasswordRoute extends TWW_Routes {
   
       public function boot() {
         $this->register_routes();
-      }
+
+        add_action( 'set_logged_in_cookie', [$this, 'update_cookie'] );
+    }
+
+    public function update_cookie($logged_in_cookie) {
+        $_COOKIE[LOGGED_IN_COOKIE] = $logged_in_cookie;
+    }
 
       public function change_password(\WP_REST_Request $request) {
         $params = $request->get_params();
+        $do_check_current_password = $params['do_check_current_password'] ?? true;
   
         if(!isset($params['user_id'])) {
           return new \WP_Error('missing_params', 'Missing User ID.', ['status' => 400]);
         }
 
-        if(!isset($params['current_password'])) {
+        if(true === $do_check_current_password && !isset($params['current_password'])) {
           return new \WP_Error('missing_params', 'Missing password.', ['status' => 400]);
         }
 
@@ -48,7 +55,7 @@ class TWW_ChangePasswordRoute extends TWW_Routes {
         }
 
   
-        if(!wp_check_password($params['current_password'], $user->data->user_pass, $user->ID)) {
+        if(true === $do_check_current_password && !wp_check_password($params['current_password'], $user->data->user_pass, $user->ID)) {
           return new \WP_Error('invalid_password', 'Invalid password', ['status' => 400]);
         }
   
@@ -61,6 +68,10 @@ class TWW_ChangePasswordRoute extends TWW_Routes {
         return rest_ensure_response([
           'success' => true,
           'message' => 'Password changed successfully',
+          'rest_nonce' => wp_create_nonce('wp_rest'),
+          'user_id' => $user->ID,
+          'user_email' => $user->user_email,
+          'coupon_nonce' => wp_create_nonce('mepr_coupons')
         ]);
       }
 }

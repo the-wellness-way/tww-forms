@@ -18,7 +18,7 @@ export const initLoginModal = () => {
 }
 
 export const openLoginModal = () => {
-    const fields = createLoginFields(null);
+    const fields = createLoginFields(null, false);
     const message = null;
     createPasswordModal(fields, message);
 }
@@ -29,6 +29,7 @@ export const login = async (data) => {
         headers: {
             'Content-Type': 'application/json',
             'X-WP-Nonce': state.restNonce,
+            "Cache-Control": "no-cache, must-revalidate",
         },
         body: JSON.stringify(data),
     });
@@ -36,6 +37,40 @@ export const login = async (data) => {
     return await response.json();
 }
 
+export const createLoginFlow = (fields, message, email, mount) => {
+    const wrapper = document.createElement('div');
+    wrapper.classList.add('tww-plus-login-flow');
+
+    const wrapperInner = document.createElement('div');
+    wrapperInner.classList.add('tww-plus-login-flow__inner');
+
+    const loginFlowContent = document.createElement('div');
+    loginFlowContent.classList.add('tww-plus-login-flow__content');
+
+    const messageDiv = document.createElement('div');
+    if(message && typeof message === 'object') {
+        messageDiv.appendChild(message);
+    } else {    
+        messageDiv.textContent = message ?? '';
+    }
+
+    if(fields) {
+        loginFlowContent.appendChild(fields);
+    }
+
+    wrapper.appendChild(wrapperInner);
+    wrapperInner.appendChild(loginFlowContent);
+
+    //we need to check if mount is an actual element
+    if(mount && 'object' === typeof mount) {
+        console.log('mounting to element');
+        mount[0].innerHTML = '';
+        mount[0].appendChild(wrapper);
+        
+    } else {
+        document.body.appendChild(wrapper);
+    }
+}
 
 export const createPasswordModal = (fields , message, email) => {
     const modal = document.createElement('div');
@@ -69,7 +104,7 @@ export const createPasswordModal = (fields , message, email) => {
     modalContent.appendChild(close);
     modalContent.appendChild(h2);
     modalContent.appendChild(p);
-
+    
     if(fields) {
         modalContent.appendChild(fields);
     }
@@ -100,7 +135,72 @@ export const createPasswordModal = (fields , message, email) => {
     });
 }
 
-export const createLoginFields = (email_address = '') => {
+export const createMeprRegistrationFields = (email_address = '', checkUser, pwdConfirm) => {
+    const loginFormInner = document.createElement('div');
+    loginForm.id = 'tww-mepr-login-form-inner';
+
+    const emailWrapper = document.createElement('div');
+    emailWrapper.classList.add('mp-form-row mepr_email mepr-field-required');
+    const emailLabel = document.createElement('label');
+    emailLabel.for = 'user_email1';
+    emailLabel.textContent = 'Email';
+
+    const pwdWrapper = document.createElement('div');
+    pwdWrapper.classList.add('mp-form-row mepr_password mepr-field-required');
+    pwdWrapper.classList.add('mepr_password');
+    pwdWrapper.classList.add('mepr-field-required');
+    if(checkUser) {
+        pwdWrapper.classList.add('check-if-has-account');
+    }
+
+    const pwdConfirmWrapper = document.createElement('div');
+    pwdConfirmWrapper.classList.add('mp-form-row');
+    pwdConfirmWrapper.classList.add('mepr_password_confirm');
+    pwdConfirmWrapper.classList.add('mepr-field-required');
+    if(checkUser) {
+        pwdConfirmWrapper.classList.add('check-if-has-account');
+    }
+
+    const pwdLabel = document.createElement('label');
+    pwdLabel.for = 'mepr_user_password1';
+    pwdLabel.textContent = 'Password';
+
+    const submitWrapper = document.createElement('div');
+    submitWrapper.classList.add('tww-plus-login__fields-wrapper');
+    submitWrapper.classList.add('tww-plus-login__submit-wrapper');
+
+    const forgotPwdWrapper = document.createElement('div');
+    forgotPwdWrapper.classList.add('tww-plus-login__fields-wrapper');
+
+    const email = document.createElement('input');
+    email.type = 'email';
+    email.name = 'mepr_email';
+    email.id = 'user_email1';
+    email.value = email_address;
+    email.placeholder = 'Email';
+
+    if(!email.value || !validateEmail(email.value)) {
+        email.classList.add('invalid');
+    }
+
+    email.addEventListener('blur', (e) => {
+        if(!validateEmail(e.target.value)) {
+            e.target.classList.add('invalid');
+        } else {
+            e.target.classList.remove('invalid');
+        }
+    });
+
+    const password = document.createElement('input');
+    password.type = 'password';
+    password.name = 'password';
+    password.id = 'tww-plus-login-password';
+    password.placeholder = 'Password';
+    password.classList.add('tww-plus-login__password');
+}
+
+
+export const createLoginFields = (email_address = '', checkUser, pwdConfirm) => {
     const loginForm = document.createElement('form');
     loginForm.id = config.twwLoginForm;
 
@@ -116,6 +216,11 @@ export const createLoginFields = (email_address = '') => {
     const pwdWrapper = document.createElement('div');
     pwdWrapper.classList.add('tww-plus-login__fields-wrapper');
     pwdWrapper.classList.add('tww-plus-login__fields-wrapper--password');
+
+    if(checkUser) {
+        pwdWrapper.classList.add('check-if-has-account');
+    }
+
     const pwdLabel = document.createElement('label');
     pwdLabel.for = 'password';
     pwdLabel.textContent = 'Password';
@@ -134,6 +239,10 @@ export const createLoginFields = (email_address = '') => {
     email.value = email_address;
     email.placeholder = 'Email';
 
+    if(!email.value || !validateEmail(email.value)) {
+        email.classList.add('invalid');
+    }
+
     email.addEventListener('blur', (e) => {
         if(!validateEmail(e.target.value)) {
             e.target.classList.add('invalid');
@@ -148,6 +257,21 @@ export const createLoginFields = (email_address = '') => {
     password.id = 'tww-plus-login-password';
     password.placeholder = 'Password';
     password.classList.add('tww-plus-login__password');
+
+    if(!password.value) {
+        password.classList.add('invalid');
+    }
+    
+    let passwordConfirm = null;
+
+    if(pwdConfirm) {
+        passwordConfirm = document.createElement('input');
+        passwordConfirm.type = 'password';
+        passwordConfirm.name = 'password_confirm';
+        passwordConfirm.id = 'tww-plus-login-password-confirm';
+        passwordConfirm.placeholder = 'Confirm Password';
+        passwordConfirm.classList.add('tww-plus-login__password-confirm');
+    }
 
     const passwordEyeBtn = document.createElement('button');
     passwordEyeBtn.classList.add('tww-plus-password-eye-btn');
@@ -164,11 +288,17 @@ export const createLoginFields = (email_address = '') => {
         //check if password is visible
         if('password' === password.type) {
             password.type = 'text';
+            if(passwordConfirm) {
+                passwordConfirm.type = 'text';
+            }
             passwordEye.classList.add('dashicons-visibility');
             passwordEye.classList.remove('dashicons-hidden');
         }
         else {
             password.type = 'password';
+            if(passwordConfirm) {
+                passwordConfirm.type = 'password';
+            }
             passwordEye.classList.remove('dashicons-visibility');
             passwordEye.classList.add('dashicons-hidden');
         }
@@ -188,7 +318,6 @@ export const createLoginFields = (email_address = '') => {
 
     const buttonLoader = document.createElement('div');
     buttonLoader.classList.add('loader-default--inner');
-
 
     const spanLoader = document.createElement('span');
     spanLoader.classList.add('button-text');
@@ -210,6 +339,7 @@ export const createLoginFields = (email_address = '') => {
     loginForm.addEventListener('submit', (e) => {
         let email_value = email.value;
         let password_value = password.value;
+        let useAuth0 = window.twwf_forms_auth0?.active ?? false;
 
         e.preventDefault();
 
@@ -226,7 +356,7 @@ export const createLoginFields = (email_address = '') => {
                 }
 
                 clearErrors('#error-message', true);
-                login({email: email_value, password: password_value}).then(response => {
+                login({email: email_value, password: password_value, use_auth_0: useAuth0}).then(response => {
                     if(response.success && response.message) {
                         getEl('tww-plus-modal-inner').appendChild(successDiv(response.message));
                         window.location.reload();
@@ -254,6 +384,11 @@ export const createLoginFields = (email_address = '') => {
 
     const forgotPassword = document.createElement('a');
     forgotPassword.id = 'forgot-password-link';
+
+    if(checkUser) {
+        forgotPassword.classList.add('check-if-has-account');
+    }
+
     forgotPassword.href = state.siteUrl + '/login/?action=forgot_password';
     forgotPassword.textContent = 'Forgot password?';
 

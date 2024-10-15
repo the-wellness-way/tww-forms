@@ -70,8 +70,6 @@ class TWW_StripeRoute extends TWW_Routes {
                 'memberpress_product' =>
                 'memberpress_product_id' =>
                 'platform' => 'TWW Resume Subcsriptions via Memberpress',
-                'site_url' => site_url()
-                'transaction_id' => ''
             ];
         }
         

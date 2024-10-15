@@ -11,8 +11,10 @@ export const state = {
     subscriptionCreatedAt: window.twwForms.subscription_created_at,
     subscriptionStatus: window.twwForms.subscription_status,
     membershipId: window.twwForms.membership_id,
+    isValidUser: window.twwForms.isValidUser,
     subscriptionExpired: window.twwForms.subscriptionExpired,
     currentUserId: window.twwForms.current_user_id,
+    currentUserEmail: window.twwForms.current_user_email,
     forgotPasswordUrl: window.twwForms.forgotPasswordUrl,
     ajaxUrl: window.twwForms.ajaxUrl,
     endpoints: {

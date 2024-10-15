@@ -29,6 +29,7 @@ export const login = async (data) => {
         headers: {
             'Content-Type': 'application/json',
             'X-WP-Nonce': state.restNonce,
+            "Cache-Control": "no-cache, must-revalidate",
         },
         body: JSON.stringify(data),
     });
@@ -135,67 +136,67 @@ export const createPasswordModal = (fields , message, email) => {
 }
 
 export const createMeprRegistrationFields = (email_address = '', checkUser, pwdConfirm) => {
-    // const loginFormInner = document.createElement('div');
-    // loginForm.id = 'tww-mepr-login-form-inner';
+    const loginFormInner = document.createElement('div');
+    loginForm.id = 'tww-mepr-login-form-inner';
 
-    // const emailWrapper = document.createElement('div');
-    // emailWrapper.classList.add('mp-form-row mepr_email mepr-field-required');
-    // const emailLabel = document.createElement('label');
-    // emailLabel.for = 'user_email1';
-    // emailLabel.textContent = 'Email';
+    const emailWrapper = document.createElement('div');
+    emailWrapper.classList.add('mp-form-row mepr_email mepr-field-required');
+    const emailLabel = document.createElement('label');
+    emailLabel.for = 'user_email1';
+    emailLabel.textContent = 'Email';
 
-    // const pwdWrapper = document.createElement('div');
-    // pwdWrapper.classList.add('mp-form-row mepr_password mepr-field-required');
-    // pwdWrapper.classList.add('mepr_password');
-    // pwdWrapper.classList.add('mepr-field-required');
-    // if(checkUser) {
-    //     pwdWrapper.classList.add('check-if-has-account');
-    // }
+    const pwdWrapper = document.createElement('div');
+    pwdWrapper.classList.add('mp-form-row mepr_password mepr-field-required');
+    pwdWrapper.classList.add('mepr_password');
+    pwdWrapper.classList.add('mepr-field-required');
+    if(checkUser) {
+        pwdWrapper.classList.add('check-if-has-account');
+    }
 
-    // const pwdConfirmWrapper = document.createElement('div');
-    // pwdConfirmWrapper.classList.add('mp-form-row');
-    // pwdConfirmWrapper.classList.add('mepr_password_confirm');
-    // pwdConfirmWrapper.classList.add('mepr-field-required');
-    // if(checkUser) {
-    //     pwdConfirmWrapper.classList.add('check-if-has-account');
-    // }
+    const pwdConfirmWrapper = document.createElement('div');
+    pwdConfirmWrapper.classList.add('mp-form-row');
+    pwdConfirmWrapper.classList.add('mepr_password_confirm');
+    pwdConfirmWrapper.classList.add('mepr-field-required');
+    if(checkUser) {
+        pwdConfirmWrapper.classList.add('check-if-has-account');
+    }
 
-    // const pwdLabel = document.createElement('label');
-    // pwdLabel.for = 'mepr_user_password1';
-    // pwdLabel.textContent = 'Password';
+    const pwdLabel = document.createElement('label');
+    pwdLabel.for = 'mepr_user_password1';
+    pwdLabel.textContent = 'Password';
 
-    // const submitWrapper = document.createElement('div');
-    // submitWrapper.classList.add('tww-plus-login__fields-wrapper');
-    // submitWrapper.classList.add('tww-plus-login__submit-wrapper');
+    const submitWrapper = document.createElement('div');
+    submitWrapper.classList.add('tww-plus-login__fields-wrapper');
+    submitWrapper.classList.add('tww-plus-login__submit-wrapper');
 
-    // const forgotPwdWrapper = document.createElement('div');
-    // forgotPwdWrapper.classList.add('tww-plus-login__fields-wrapper');
+    const forgotPwdWrapper = document.createElement('div');
+    forgotPwdWrapper.classList.add('tww-plus-login__fields-wrapper');
 
-    // const email = document.createElement('input');
-    // email.type = 'email';
-    // email.name = 'mepr_email';
-    // email.id = 'user_email1';
-    // email.value = email_address;
-    // email.placeholder = 'Email';
+    const email = document.createElement('input');
+    email.type = 'email';
+    email.name = 'mepr_email';
+    email.id = 'user_email1';
+    email.value = email_address;
+    email.placeholder = 'Email';
 
-    // if(!email.value || !validateEmail(email.value)) {
-    //     email.classList.add('invalid');
-    // }
+    if(!email.value || !validateEmail(email.value)) {
+        email.classList.add('invalid');
+    }
 
-    // email.addEventListener('blur', (e) => {
-    //     if(!validateEmail(e.target.value)) {
-    //         e.target.classList.add('invalid');
-    //     } else {
-    //         e.target.classList.remove('invalid');
-    //     }
-    // });
+    email.addEventListener('blur', (e) => {
+        if(!validateEmail(e.target.value)) {
+            e.target.classList.add('invalid');
+        } else {
+            e.target.classList.remove('invalid');
+        }
+    });
 
-    // const password = document.createElement('input');
-    // password.type = 'password';
-    // password.name = 'password';
-    // password.id = 'tww-plus-login-password';
-    // password.placeholder = 'Password';
-    // password.classList.add('tww-plus-login__password');
+    const password = document.createElement('input');
+    password.type = 'password';
+    password.name = 'password';
+    password.id = 'tww-plus-login-password';
+    password.placeholder = 'Password';
+    password.classList.add('tww-plus-login__password');
 }
 
 

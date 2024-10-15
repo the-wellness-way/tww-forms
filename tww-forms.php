@@ -28,7 +28,7 @@
  }
 
  if(!defined('TWW_FORMS_ASSETS_VERSION')) {
-     define('TWW_FORMS_ASSETS_VERSION', '1.1.02');
+     define('TWW_FORMS_ASSETS_VERSION', '1.1.03');
  }
 
 require_once 'vendor/autoload.php';
@@ -55,7 +55,6 @@ class TWW_Forms {
 }
 
 $twwForms = new TWW_Forms();
-
 add_action('wp_enqueue_scripts', 'tww_register_styles');
 function tww_register_styles() {
     $version = TWW_FORMS_ASSETS_VERSION;
@@ -70,7 +69,7 @@ function tww_register_styles() {
 }
 
 use TWWForms\Controllers\TWW_SubscriptionsCtrl;
-add_action('wp_enqueue_scripts', 'tww_register_scripts');
+
 
 class TWW_Coupon {
     public function __construct() {
@@ -117,6 +116,8 @@ class TWW_Coupon {
 
 $twwCoupon = new TWW_Coupon();
 
+
+add_action('wp_enqueue_scripts', 'tww_register_scripts');
 function tww_register_scripts() {
     $version = TWW_FORMS_ASSETS_VERSION;
     $mepr_options = \MeprOptions::fetch();
@@ -162,7 +163,6 @@ function tww_register_scripts() {
             }
         }
     }
-
 
     wp_register_script('tww-forms', TWW_FORMS_PLUGIN_URL . 'resources/assets/js/tww-forms.js', [], $version, true);
     wp_enqueue_script('tww-forms');
@@ -262,11 +262,32 @@ function enqueue_webpack_dev_server_script() {
         $file = false !== strpos($_SERVER['HTTP_HOST'],'localhost:8081') && 'prod' !== $mode ? 'main' : 'index';
         $version = false !== strpos($_SERVER['HTTP_HOST'],'localhost:8081') ? null : TWW_FORMS_ASSETS_VERSION;
         $url = trailingslashit(site_url()) . 'wp-content/plugins/tww-forms/resources/dist/'.$file.'.bundle.js';
-        wp_register_script('webpack-dev-server', $url, array(), $version, true);
+        wp_register_script('webpack-dev-server', $url, array(), TWW_FORMS_ASSETS_VERSION, true);
         wp_enqueue_script('webpack-dev-server');
 }
 
 add_action('wp_enqueue_scripts', 'enqueue_webpack_dev_server_script', 11);
+
+
+function twwe_add_path_to_mepr_rendering() {
+    add_filter('mepr_view_paths_get_string_/readylaunch/checkout/invoice', function($paths) {
+        $path_to_add = TWW_FORMS_PLUGIN . 'templates/memberpress';
+    
+        $paths[] = $path_to_add; 
+    
+        return $paths; 
+    }, 1);
+
+    // add_filter('mepr_view_paths_get_string_/checkout/invoice', function($paths) {
+    //     $path_to_add = TWW_FORMS_PLUGIN . 'templates/memberpress';
+    
+    //     $paths[] = $path_to_add; 
+    
+    //     return $paths; 
+    // }, 1);
+}
+
+add_action('init', 'twwe_add_path_to_mepr_rendering');
   
 
 

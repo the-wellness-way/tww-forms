@@ -52,6 +52,10 @@ input.invalid {
     border: 1px solid #b32d2e !important;
 }
 
+input.neutral {
+    border: 1px solid var(--tww-light-grey) !important;
+}
+
 .tww-change-plan-modal,
 .tww-plus-modal {
     background-color: white;

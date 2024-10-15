@@ -28,6 +28,12 @@ class TWW_SubscriptionRoute extends TWW_Routes {
 
     public function boot() {
         $this->register_routes();
+
+        add_action( 'set_logged_in_cookie', [$this, 'update_cookie'] );
+    }
+
+    public function update_cookie($logged_in_cookie) {
+        $_COOKIE[LOGGED_IN_COOKIE] = $logged_in_cookie;
     }
 
     public function get_free_membership() {
@@ -45,6 +51,8 @@ class TWW_SubscriptionRoute extends TWW_Routes {
     public function create_member(\WP_REST_Request $request) {
         $params = $request->get_params();
         $post_id = $params['post_id'] ?? null;
+        $with_password = $params['with_password'] ?? false;
+        $do_login = $params['do_login'] ?? true;
 
         if(!$params['email'] || !$params['username'] || !is_email($params['email'])) {
             return new \WP_Error('missing_params', 'Missing required parameters', ['status' => 400]);
@@ -95,28 +103,46 @@ class TWW_SubscriptionRoute extends TWW_Routes {
         $response_body = json_decode(wp_remote_retrieve_body($response), true);
 
         if($response_body && array_key_exists('code', $response_body) && 'mp_db_create_error' === $response_body['code']) {
-            return new \WP_Error('member_exists', 'Error creating member. You may have already subscribed.', ['status' => 400]);
+            return rest_ensure_response([
+                'code' => 'member_exists',
+                'message' => 'Error creating member. You may have already subscribed.',
+                'rest_nonce' => wp_create_nonce('wp_rest'),
+                'coupon_nonce' => wp_create_nonce('mepr_coupons') 
+            ]);
         }
 
-        if($response_body && array_key_exists('id', $response_body) && !current_user_can('manage_options')) {
+        if($response_body && array_key_exists('id', $response_body)) {
             $user = new \MeprUser($response_body['id']);
             $wp_user = get_user_by('email', $params['email']);
             
-            if($user->ID) {
-                wp_set_current_user($user->ID);
-                wp_set_auth_cookie($user->ID);
-                do_action('wp_login', $params['email'], $wp_user);
-
-                $user_login = $wp_user->user_login;
-                
-                $user->send_password_notification('reset');
-            }
+            if(!current_user_can('manage_options')) {
+                if($user->ID) {
+                    wp_set_current_user($user->ID);
+                    wp_set_auth_cookie($user->ID);
+    
+                    if($do_login) {
+                        do_action('wp_login', $params['email'], $wp_user);
+                    }
+                    
+                    $user_login = $wp_user->user_login;
+                    
+                    if(false === $with_password) {
+                        $user->send_password_notification('welcome');
+                    } else {
+                        $user->send_password_notification('reset');
+                    }
+                }
+            }  
         }
 
         $data = [
             'status' => 'success',
+            'user_id' => $user->ID,
+            'with_password' => $with_password,
             'message' => 'Member created successfully',
             'redirect' => $params['redirect_url'] ?? '',
+            'rest_nonce' => wp_create_nonce('wp_rest'),
+            'coupon_nonce' => wp_create_nonce('mepr_coupons'),
             'data' => $response_body
         ];
 
@@ -160,6 +186,7 @@ class TWW_SubscriptionRoute extends TWW_Routes {
         $data = [
             "success" => true,
             "message" => "User updated successfully",
+            "user_id" => $user_id,
             "data" => [
                 "user_id" => $user_id,
                 "first_name" => $params['first_name'] ?? $updated_first_name,

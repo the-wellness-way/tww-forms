@@ -3,7 +3,7 @@ import { config } from "./config.js";
 import { state, setState } from "./state.js";
 import { twwLoaderSVG } from "./loader.js";
 
-import { initChangePasswordForm } from "./shortcodes/tww-change-password-form-shortcode.js";
+import { initChangePasswordForm, changePasswordRequest } from "./shortcodes/tww-change-password-form-shortcode.js";
 import { initEditUserName } from "./shortcodes/tww-edit-username.js";
 import { initCancelSubscription, initUpdateSubscription, initResumeWithCreateTransactionButton, initChangePlanModal } from "./shortcodes/tww-current-membership-shortcode.js";
 import { initForm } from "./shortcodes/tww-free-subscription-shortcode.js";
@@ -37,4 +37,6 @@ import { initGrams2OuncesShortcode } from "./shortcodes/tww-grams2ounces-shortco
     window.createLoginFlow = createLoginFlow;
     window.createLoginFields = createLoginFields;
     window.createMeprRegistrationFields = createMeprRegistrationFields;
+    window.changePasswordRequest = changePasswordRequest;
+    window.login = login;
 }());
